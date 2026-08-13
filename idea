@@ -1,0 +1,24 @@
+## Motek - MVP
+
+### Główny problem
+
+Osoby które robią na drutach/szydełku zawsze mają za mało miejsca na przechowywanie włóczek. Jest to problematyczne, szczególnie kiedy chcesz coś znaleźć bez robienia bałaganu. Ciężko też zapamiętać ile konkretnej włóczki zostało ci z poprzedniego projektu.
+
+### Najmniejszy zestaw funkcjonalności
+
+- Dodawanie swoich włóczek do biblioteki (nazwa, producent, kolor, farbowanie, skład, na jakie druty/szydełko, ilość (motki/gramy), próbka, ocena/notatka - niektóre jako wymagane, ale nie wszystkie, żeby nie przeciążyć usera)
+- każda włóczka ma sekcje z zamiennikami, Aplikacja wyświetla sugerowane zamienniki (AI) ze zbiorów usera. User może dodać rekomendacje jako zamiennik albo odrzucić
+- Przeglądanie, filtrowanie, sortowanie, edycja i usuwanie włóczek
+- Prosty system kont użytkowników do przechowywania włóczek
+
+### Co NIE wchodzi w zakres MVP
+
+- Dodawanie projektów (swetrów/ czapek itp.), rekomendacje projektów do danej włóczki
+- Rekomendacje zamienników włóczek spoza włóczek dodanych przez konkretnego usera
+- Współdzielenie/interakcje między użytkownikami
+- masowego dodawania włóczek na podstawie faktur, paragonów
+- Aplikacje mobilne (na początek tylko web)
+
+### Kryteria sukcesu
+
+- 75% sugerowanych zamienników włóczki jest akceptowane przez usera
