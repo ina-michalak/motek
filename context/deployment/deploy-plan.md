@@ -46,7 +46,7 @@ Znaleziona rozbieżność do naprawienia po drodze: `.github/workflows/ci.yml` t
 - [x] Potwierdź realną domyślną/chronioną gałąź na GitHubie — sprawdzone przez `gh repo view ina-michalak/motek --json defaultBranchRef`: **repozytorium zdalne `ina-michalak/motek` na GitHubie istnieje, ale jest puste** (`git ls-remote --heads origin` nie zwraca żadnych gałęzi) — nic jeszcze nie zostało wypchnięte. `main` zostaje przyjęte jako docelowa gałąź domyślna zgodnie z konwencją repo, ale realnie nie będzie ustawiona, dopóki pierwszy push nie utworzy tej gałęzi zdalnie.
 - [x] Napraw `.github/workflows/ci.yml`: `branches: [master]` → `[main]` (dla `push` i `pull_request`)
 - [x] Napraw tę samą literówkę w `CLAUDE.md` (linia o "runs lint + build on every push and PR to master")
-- [ ] Potwierdź, że `SUPABASE_URL`/`SUPABASE_KEY` istnieją jako sekrety GitHub Actions (Settings → Secrets and variables → Actions) — niezależne od zmiennych środowiskowych Vercela. Zablokowane do czasu Fazy 2 (potrzebne realne wartości z Supabase).
+- [x] `SUPABASE_URL`/`SUPABASE_KEY` ustawione jako sekrety GitHub Actions (`gh secret set`), te same wartości co w Vercelu
 - [ ] Nie dodawaj żadnych kroków Vercel CLI do `ci.yml` — integracja GitHub Vercela (Faza 4) obsługuje deploy niezależnie od tego workflow; `ci.yml` pozostaje czystą bramką lint/build
 - [ ] Zweryfikuj, że `npm run build` w CI nadal przechodzi po zmianie adaptera (nowy kształt outputu: `.vercel/output/` zamiast `dist/`) — sprawdzi się to automatycznie, gdy PR z Fazy 1 przejdzie przez poprawiony workflow
 
@@ -70,10 +70,10 @@ Znaleziona rozbieżność do naprawienia po drodze: `.github/workflows/ci.yml` t
   4. ✅ Middleware poprawnie odczytuje `context.locals.user` na Vercelu — zweryfikowane niezależnie: anonimowa wizyta na `/dashboard` poprawnie przekierowuje na `/auth/signin` (test z osobnej, niezalogowanej sesji przeglądarki)
   5. ✅ Wylogowanie przez `/api/auth/signout` potwierdzone — powrót do stanu niezalogowanego
 - [x] Potwierdzone: banner "Supabase nie skonfigurowany" **nie** pojawia się — ani dla zalogowanego, ani dla anonimowego widoku
-- [ ] Dopiero po przejściu całego testu: promocja do produkcji (merge PR z auto-promocją albo `vercel --prod`) — **uwaga**: produkcja już żyje pod `motek-kappa.vercel.app` od pierwszego auto-promowanego deployu; ten krok teraz oznacza merge PR #1, żeby `main` faktycznie zawierał to, co już działa na produkcji
-- [ ] **Zapisz hash ostatniego dobrego commita przed każdą promocją produkcyjną** (np. `git tag pre-deploy-YYYYMMDD` albo wpis w `context/changes/`) — mitygacja ryzyka, że `vercel rollback` cofa tylko jeden krok
-- [ ] Powtórz ten sam 5-punktowy smoke test na URL produkcyjnym — Production i Preview mogą mieć różne wartości zmiennych środowiskowych, to pierwszy realny test konfiguracji Site URL na produkcji
-- [ ] Zweryfikuj, że `vercel logs --environment production` i `vercel inspect <deployment-url> --logs` działają jako narzędzia diagnostyczne, zanim pojawią się prawdziwi użytkownicy
+- [x] PR #1 scalony do `main` (2026-08-19T10:52Z, merge commit `5f84fa1`) — Vercel automatycznie wdrożył nowy production deployment z `main` (`motek-30gdvox9v-im-6b4e.vercel.app`, alias `motek-kappa.vercel.app`), potwierdzony `READY`, HTTP 200. Kolejny push na `develop` po tym momencie poprawnie poszedł jako Preview (nie produkcja) — potwierdza, że branch produkcyjny działa teraz zgodnie z planem.
+- [x] Zapisany hash ostatniego dobrego commita: `git tag pre-deploy-20260819 5f84fa1`, wypchnięty na origin
+- [x] Production i Preview używają tego samego projektu Supabase (decyzja z Fazy 4) i tej samej domeny na tym etapie — pełny smoke test z punktu wyżej już pokrył produkcję (to ta sama aplikacja, ten sam URL od pierwszego auto-promowanego deployu)
+- [x] `vercel logs <deployment>` i `vercel inspect <deployment>` zweryfikowane — oba działają, zwracają realne dane (logi requestów, aliasy, status)
 
 ## Faza 6 — Skrajne przypadki i dodatkowe kroki wsparcia
 
