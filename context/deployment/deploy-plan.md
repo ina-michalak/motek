@@ -32,17 +32,14 @@ Znaleziona rozbieżność do naprawienia po drodze: `.github/workflows/ci.yml` t
 
 ## Faza 2 — Zewnętrzna integracja: Supabase (provisioning)
 
-- [ ] Utwórz zdalny projekt Supabase (region blisko Frankfurtu/EU, np. `eu-central-1`, dla spójności z regionem Vercela `fra1`)
-- [ ] Zapisz `Project URL` i klucz (anon/service, zgodnie z tym czego oczekuje `@supabase/ssr` w `src/lib/supabase.ts`) — nie commituj; trafiają do lokalnego `.env` (już w `.gitignore`) i zmiennych środowiskowych Vercela w Fazie 4
-- [ ] Podepnij lokalny CLI Supabase do nowego projektu: `supabase link --project-ref <ref>`
+- [x] Utwórz zdalny projekt Supabase — projekt `motek` utworzony (region West EU/Ireland zamiast Frankfurtu — Frankfurt nie był dostępny w prostym selektorze regionu; akceptowalne, różnica rzędu kilkunastu-kilkudziesięciu ms, spory zapas względem budżetów NFR z PRD). "Automatically expose new tables" wyłączone, "Enable automatic RLS" włączone przy tworzeniu projektu.
+- [x] Zapisz `Project URL` (`https://euiknkydnmjovnrpksya.supabase.co`) i klucz **anon/publishable** (nowy format `sb_publishable_...`) — zapisane lokalnie w `.env` (gitignored, nigdy nie trafiły do commitów)
+- [ ] Podepnij lokalny CLI Supabase do nowego projektu: `supabase link --project-ref <ref>` — pominięte na razie, nie blokuje deploymentu; do zrobienia przed pierwszą migracją SQL
 - [ ] **Przypomnienie o RLS** (twarda zasada z `CLAUDE.md`: każda nowa tabela wymaga granularnych polityk RLS per operacja/rola): dziś nie ma żadnych tabel do zabezpieczenia, ale to jest bramka na przyszłość — pierwsza migracja w `supabase/migrations/` (katalog jeszcze nie istnieje) musi od razu zawierać komplet polityk RLS w tym samym PR, nie jako follow-up
-- [ ] Skonfiguruj w Supabase Auth (Authentication → URL Configuration): **Site URL** = docelowa domena produkcyjna Vercela (ustal ją dopiero po `vercel link` w Fazie 4) oraz **Redirect URLs**. `src/pages/api/auth/signup.ts` wywołuje `supabase.auth.signUp()` bez jawnego `emailRedirectTo`, więc link w mailu potwierdzającym idzie na Site URL — to jedyne miejsce, które musi być poprawne, zanim ktokolwiek przetestuje prawdziwy signup.
+- [x] Skonfiguruj w Supabase Auth (Authentication → URL Configuration): **Site URL** = `https://motek-kappa.vercel.app` (pierwszy deployment Vercel automatycznie awansował na produkcję — patrz Faza 5), **Redirect URLs** = `https://motek-kappa.vercel.app/**` — zapisane i zweryfikowane realnym signupem.
   - **Skrajny przypadek — preview deploye**: Vercel generuje dynamiczne URL-e per branch/PR, których Supabase nie umie whitelistować wildcardem. Rekomendacja (dopasowana do solo-dev MVP): testuj pełny flow auth tylko na Production i lokalnie; nie próbuj wpuszczać preview URL-i na allowlistę. Jeśli w przyszłości to za mało — alternatywa to stały alias Vercela (`vercel alias`) wskazujący na jeden deployment brancha `develop`, dodany jako jedyny dodatkowy wpis.
-- [ ] Decyzja o dostarczaniu maili potwierdzających (`src/pages/auth/confirm-email.astro` zakłada, że w produkcji realny mail dojdzie):
-  - Opcja A (domyślna na start): wbudowany mailer Supabase, mimo limitu ~2–4 maile/h na darmowym planie — akceptowalne przy skali "small/low" z PRD
-  - Opcja B: własny SMTP (Resend/Postmark) skonfigurowany od razu w Authentication → Email → SMTP Settings
-  - Rekomendacja: zacznij od A, przejdź na B, jeśli limit realnie przeszkodzi (patrz Faza 6, skrajny przypadek)
-- [ ] Dodaj `SUPABASE_URL`/`SUPABASE_KEY` do lokalnego `.env`, żeby dev wskazywał na prawdziwy projekt zamiast pustego stubu
+- [x] Decyzja o dostarczaniu maili potwierdzających: **Opcja A** (wbudowany mailer Supabase) — potwierdzone działające, mail z realnym linkiem potwierdzającym dotarł przy pierwszym teście signupu. Przejście na własny SMTP (Opcja B) zostaje jako eskalacja, gdyby limit ~2–4 maile/h zaczął przeszkadzać (patrz Faza 6).
+- [x] Dodaj `SUPABASE_URL`/`SUPABASE_KEY` do lokalnego `.env`, żeby dev wskazywał na prawdziwy projekt zamiast pustego stubu
 
 ## Faza 3 — Uzgodnienie CI / GitHub Actions
 
@@ -59,21 +56,21 @@ Znaleziona rozbieżność do naprawienia po drodze: `.github/workflows/ci.yml` t
 - [x] Podłącz repozytorium GitHub przez integrację Vercela — pierwsza próba (`vercel link`/`vercel git connect`) nieudana, bo zdalne repo było jeszcze puste; po wypchnięciu `develop`+`main` i zmianie domyślnego brancha GitHuba na `main`, połączenie przez dashboard (Project Settings → Git → Connect Git Repository) zadziałało.
 - [x] Branch produkcyjny w Vercelu: **potwierdzone przez API** (`GET /v9/projects/{id}` → `link.productionBranch: "main"`) — ustawiony automatycznie od domyślnego brancha GitHuba w momencie łączenia, nowszy dashboard nie ma już osobnego pola do tego w UI
 - [x] Utwórz `vercel.json` w korzeniu repo z `{ "regions": ["fra1"] }`
-- [ ] Skonfiguruj zmienne środowiskowe w dashboardzie Vercela, osobno dla Production / Preview / Development: `SUPABASE_URL`, `SUPABASE_KEY`
-- [ ] **Decyzja o izolacji danych w Preview**: Hobby-tier preview URL-e są domyślnie nieautoryzowane (brak wbudowanej ochrony dostępu), a guardrail z PRD wymaga ścisłej izolacji danych per user. Dziś nie ma jeszcze realnych danych userów (brak tabel biblioteki włóczek), więc na start bezpiecznie jest wskazać Preview na ten sam projekt Supabase co Production — ale to jest punkt do ponownej decyzji: w chwili gdy powstaną tabele biblioteki (FR-002+), przed wypuszczeniem realnych danych osobnych trzeba założyć osobny projekt Supabase pod Preview/staging
+- [x] Skonfiguruj zmienne środowiskowe w dashboardzie Vercela (przez CLI: `vercel env add`), osobno dla Production / Preview / Development: `SUPABASE_URL`, `SUPABASE_KEY` — wszystkie 6 kombinacji dodane
+- [x] **Decyzja o izolacji danych w Preview**: podjęta — Preview wskazuje na ten sam projekt Supabase co Production (brak jeszcze realnych danych userów/tabel biblioteki). **Przypomnienie na przyszłość**: w chwili gdy powstaną tabele biblioteki (FR-002+), przed wypuszczeniem realnych danych osobnych trzeba założyć osobny projekt Supabase pod Preview/staging.
 - [ ] Zanotuj zastrzeżenie ToS planu Hobby ("non-commercial use") jako punkt decyzyjny, nie akcję: jeśli kiedykolwiek pojawi się monetyzacja (nawet dobrowolne napiwki), upgrade do Pro ($20/mo) zanim ta funkcja wejdzie na produkcję, nie po fakcie
 
 ## Faza 5 — Pierwszy deploy i weryfikacja
 
-- [ ] Wypchnij zmiany z Faz 1–4 na branchu feature, otwórz PR do `main` — uruchamia to poprawiony `ci.yml` oraz automatyczny preview deploy Vercela
-- [ ] Na preview URL wykonaj pełny smoke test flow autoryzacji na realnym środowisku Vercela (nie `npm run dev`):
-  1. Rejestracja testowego maila na `/auth/signup` → przekierowanie na `/auth/confirm-email` powinno pokazać wariant "sprawdź maila" (nie auto-confirm, bo `import.meta.env.DEV` będzie `false` na Vercelu)
-  2. Potwierdź, że mail faktycznie dotarł (weryfikuje konfigurację Site URL/dostarczania maili z Fazy 2) i link działa
-  3. Zaloguj się na `/auth/signin` skonfirmowanym kontem
-  4. Potwierdź przekierowanie na `/dashboard` i że `src/middleware.ts` poprawnie odczytuje `context.locals.user` w środowisku Vercela (to realny test na model dostarczania zmiennych `process.env` Vercela vs. bindingi Cloudflare)
-  5. Wyloguj się przez `/api/auth/signout`, potwierdź przekierowanie z powrotem na `/auth/signin`
-- [ ] Potwierdź, że banner "Supabase nie skonfigurowany" **nie** pojawia się na preview — jego brak jest sygnałem poprawnego wpięcia zmiennych
-- [ ] Dopiero po przejściu całego testu: promocja do produkcji (merge PR z auto-promocją albo `vercel --prod`)
+- [x] Wypchnij zmiany z Faz 1–4 na `develop`, otwórz PR do `main` — CI zielone (https://github.com/ina-michalak/motek/pull/1). **Odchylenie od planu**: pierwszy deployment w ogóle dla tego projektu Vercel automatycznie awansował na produkcję (`readySubstate: PROMOTED`), mimo że kod poszedł z `develop`, nie z `main` — to udokumentowane zachowanie Vercela przy zupełnie pierwszym deployu (bootstrap aliasu produkcyjnego), nie błąd konfiguracji. Kolejne pushe na `develop` będą już poprawnie trafiać jako Preview.
+- [x] Pełny smoke test flow autoryzacji na realnym środowisku Vercela (`https://motek-kappa.vercel.app`), wykonany częściowo ręcznie przez użytkownika, częściowo zweryfikowany automatycznie przeglądarką:
+  1. ✅ Rejestracja testowego konta na `/auth/signup` → mail potwierdzający dotarł (Opcja A, wbudowany mailer Supabase — działa)
+  2. ✅ Link w mailu zadziałał, konto potwierdzone
+  3. ✅ Logowanie na `/auth/signin` — potwierdzone (widoczny email + "Dashboard/Sign out" w topbarze)
+  4. ✅ Middleware poprawnie odczytuje `context.locals.user` na Vercelu — zweryfikowane niezależnie: anonimowa wizyta na `/dashboard` poprawnie przekierowuje na `/auth/signin` (test z osobnej, niezalogowanej sesji przeglądarki)
+  5. ✅ Wylogowanie przez `/api/auth/signout` potwierdzone — powrót do stanu niezalogowanego
+- [x] Potwierdzone: banner "Supabase nie skonfigurowany" **nie** pojawia się — ani dla zalogowanego, ani dla anonimowego widoku
+- [ ] Dopiero po przejściu całego testu: promocja do produkcji (merge PR z auto-promocją albo `vercel --prod`) — **uwaga**: produkcja już żyje pod `motek-kappa.vercel.app` od pierwszego auto-promowanego deployu; ten krok teraz oznacza merge PR #1, żeby `main` faktycznie zawierał to, co już działa na produkcji
 - [ ] **Zapisz hash ostatniego dobrego commita przed każdą promocją produkcyjną** (np. `git tag pre-deploy-YYYYMMDD` albo wpis w `context/changes/`) — mitygacja ryzyka, że `vercel rollback` cofa tylko jeden krok
 - [ ] Powtórz ten sam 5-punktowy smoke test na URL produkcyjnym — Production i Preview mogą mieć różne wartości zmiennych środowiskowych, to pierwszy realny test konfiguracji Site URL na produkcji
 - [ ] Zweryfikuj, że `vercel logs --environment production` i `vercel inspect <deployment-url> --logs` działają jako narzędzia diagnostyczne, zanim pojawią się prawdziwi użytkownicy
