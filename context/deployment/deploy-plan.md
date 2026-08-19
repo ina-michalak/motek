@@ -55,14 +55,10 @@ Znaleziona rozbieżność do naprawienia po drodze: `.github/workflows/ci.yml` t
 
 ## Faza 4 — Konfiguracja projektu Vercel
 
-- [ ] `npm i -g vercel`, `vercel login`, `vercel link` z korzenia repo (tworzy lokalny `.vercel/project.json`, już zignorowany w Fazie 1)
-- [ ] Podłącz repozytorium GitHub przez integrację Vercela (Import Git Repository) — każdy push/PR dostaje automatyczny preview deploy
-- [ ] Ustaw branch produkcyjny w ustawieniach projektu Vercel zgodnie z Fazą 3 (czyli `main`)
-- [ ] Utwórz `vercel.json` w korzeniu repo:
-  ```json
-  { "regions": ["fra1"] }
-  ```
-  (mitygacja ryzyka z rejestru: domyślny region `iad1` dodaje opóźnienie dla polskich userów; to ustawienie na poziomie projektu, nie da się zmienić per-deploy)
+- [x] `npm i -g vercel`, `vercel login`, `vercel link` z korzenia repo — projekt utworzony jako `im-6b4e/motek`, lokalny `.vercel/project.json` utworzony (zignorowany w Fazie 1)
+- [x] Podłącz repozytorium GitHub przez integrację Vercela — pierwsza próba (`vercel link`/`vercel git connect`) nieudana, bo zdalne repo było jeszcze puste; po wypchnięciu `develop`+`main` i zmianie domyślnego brancha GitHuba na `main`, połączenie przez dashboard (Project Settings → Git → Connect Git Repository) zadziałało.
+- [x] Branch produkcyjny w Vercelu: **potwierdzone przez API** (`GET /v9/projects/{id}` → `link.productionBranch: "main"`) — ustawiony automatycznie od domyślnego brancha GitHuba w momencie łączenia, nowszy dashboard nie ma już osobnego pola do tego w UI
+- [x] Utwórz `vercel.json` w korzeniu repo z `{ "regions": ["fra1"] }`
 - [ ] Skonfiguruj zmienne środowiskowe w dashboardzie Vercela, osobno dla Production / Preview / Development: `SUPABASE_URL`, `SUPABASE_KEY`
 - [ ] **Decyzja o izolacji danych w Preview**: Hobby-tier preview URL-e są domyślnie nieautoryzowane (brak wbudowanej ochrony dostępu), a guardrail z PRD wymaga ścisłej izolacji danych per user. Dziś nie ma jeszcze realnych danych userów (brak tabel biblioteki włóczek), więc na start bezpiecznie jest wskazać Preview na ten sam projekt Supabase co Production — ale to jest punkt do ponownej decyzji: w chwili gdy powstaną tabele biblioteki (FR-002+), przed wypuszczeniem realnych danych osobnych trzeba założyć osobny projekt Supabase pod Preview/staging
 - [ ] Zanotuj zastrzeżenie ToS planu Hobby ("non-commercial use") jako punkt decyzyjny, nie akcję: jeśli kiedykolwiek pojawi się monetyzacja (nawet dobrowolne napiwki), upgrade do Pro ($20/mo) zanim ta funkcja wejdzie na produkcję, nie po fakcie
