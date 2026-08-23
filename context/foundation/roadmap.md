@@ -29,7 +29,7 @@ Rękodzielniczki i rękodzielnicy z zapasem włóczki (30+ motków) nie mają wy
 
 | ID   | ID zmiany                    | Wynik (użytkownik może…)                                              | Wymagania wstępne | Odniesienia do PRD          | Status   |
 | ---- | ----------------------------- | ---------------------------------------------------------------------- | ------------------ | ---------------------------- | -------- |
-| F-01 | yarn-data-foundation          | (fundament) schemat danych biblioteki włóczek z RLS wdrożony            | —                   | Guardrail, NFR (izolacja)     | in-progress |
+| F-01 | yarn-data-foundation          | (fundament) schemat danych biblioteki włóczek z RLS wdrożony            | —                   | Guardrail, NFR (izolacja)     | done |
 | S-01 | add-and-browse-yarn-library   | dodać włóczkę i przeglądać swoją bibliotekę                            | F-01                | FR-002, FR-003, US-01         | proposed |
 | S-02 | ai-substitute-suggestions     | zobaczyć sugestie AI zamienników i zaakceptować/odrzucić je            | S-01                | FR-007, FR-008, FR-009, US-01 | proposed |
 | S-03 | manage-saved-yarn-entry       | edytować zapisaną włóczkę (w tym oznaczyć jako wyczerpaną) lub usunąć  | S-01                | FR-005, FR-006                | proposed |
@@ -62,7 +62,7 @@ Fundamenty poniżej zakładają, że te elementy są obecne i NIE tworzą ich po
 - **Blokady:** —
 - **Niewiadome:** —
 - **Ryzyko:** Baza kodu potwierdza całkowity brak schematu danych — to jedyny fundament na tej mapie drogowej i musi być gotowy, zanim jakikolwiek pionowy fragment będzie mógł cokolwiek zapisać; słaby projekt tabeli spowoduje przeróbki w każdym fragmencie w dół.
-- **Status:** in-progress
+- **Status:** done
 
 ## Fragmenty
 
@@ -143,4 +143,4 @@ Brak pytań przekrojowych (obejmujących wiele fragmentów) w tej chwili. Jedyne
 
 ## Zrobione
 
-(Puste — `/10x-archive` doda tutaj wpisy, gdy zmiany dopasowane do elementów tej mapy drogowej zostaną zarchiwizowane.)
+- **F-01: (fundament) schemat danych biblioteki włóczek z RLS wdrożony** — Archived 2026-08-23 → `context/archive/2026-08-23-yarn-data-foundation/`. Lesson: —.
