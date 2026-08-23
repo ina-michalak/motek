@@ -1,7 +1,7 @@
 ---
 change_id: add-and-browse-yarn-library
 title: Add and browse yarn library
-status: implementing
+status: impl_reviewed
 created: 2026-08-23
 updated: 2026-08-23
 archived_at: null

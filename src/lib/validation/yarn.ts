@@ -30,9 +30,11 @@ export const COMMON_FIBERS = [
   "Poliester",
 ] as const;
 
-const emptyToUndefined = (value: unknown) => (typeof value === "string" && value.trim() === "" ? undefined : value);
+const emptyToUndefined = (value: unknown) =>
+  value === null || (typeof value === "string" && value.trim() === "") ? undefined : value;
 
-const optionalTrimmedString = z.preprocess(emptyToUndefined, z.string().trim().min(1).optional());
+const optionalTrimmedString = (maxLength: number) =>
+  z.preprocess(emptyToUndefined, z.string().trim().min(1).max(maxLength).optional());
 
 const optionalNumber = z.preprocess(emptyToUndefined, z.coerce.number().optional());
 
@@ -52,18 +54,18 @@ const compositionSchema = z.preprocess((value): unknown => {
 
 export const createYarnSchema = z
   .object({
-    name: z.string().trim().min(1, "Nazwa jest wymagana"),
-    manufacturer: z.string().trim().min(1, "Producent jest wymagany"),
+    name: z.string().trim().min(1, "Nazwa jest wymagana").max(200),
+    manufacturer: z.string().trim().min(1, "Producent jest wymagany").max(200),
     quantity_skeins: optionalNumber,
     quantity_grams: optionalNumber,
-    color: optionalTrimmedString,
-    dye_lot: optionalTrimmedString,
+    color: optionalTrimmedString(200),
+    dye_lot: optionalTrimmedString(200),
     composition: compositionSchema,
     needle_size_mm: optionalNumber,
     hook_size_mm: optionalNumber,
-    gauge_note: optionalTrimmedString,
+    gauge_note: optionalTrimmedString(1000),
     rating: z.preprocess(emptyToUndefined, z.coerce.number().int().min(1).max(5).optional()),
-    note: optionalTrimmedString,
+    note: optionalTrimmedString(1000),
   })
   .refine((data) => data.quantity_skeins !== undefined || data.quantity_grams !== undefined, {
     message: "Podaj ilość w motkach lub gramach",
