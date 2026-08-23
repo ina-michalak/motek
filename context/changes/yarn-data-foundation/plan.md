@@ -179,9 +179,9 @@ Brak istniejących danych do migracji — to pierwsza tabela domenowa w projekci
 
 #### Automatyczne
 
-- [x] 2.1 Sprawdzanie typów przechodzi: `npx astro check`
-- [x] 2.2 Linting przechodzi: `npm run lint` (zweryfikowano w izolacji dla `src/types.ts`; pełny `npm run lint` w repo blokowany przez przedistniejące błędy CRLF w niezwiązanych plikach — poza zakresem tej fazy)
+- [x] 2.1 Sprawdzanie typów przechodzi: `npx astro check` — bed3a65
+- [x] 2.2 Linting przechodzi: `npm run lint` (zweryfikowano w izolacji dla `src/types.ts`; pełny `npm run lint` w repo blokowany przez przedistniejące błędy CRLF w niezwiązanych plikach — poza zakresem tej fazy) — bed3a65
 
 #### Ręczne
 
-- [x] 2.3 Pola `Yarn` ręcznie porównane z kolumnami tabeli `yarns` — zgodność nazw i nullability
+- [x] 2.3 Pola `Yarn` ręcznie porównane z kolumnami tabeli `yarns` — zgodność nazw i nullability — bed3a65
