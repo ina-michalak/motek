@@ -37,6 +37,7 @@ create index yarns_user_id_idx on yarns (user_id);
 create function set_updated_at()
 returns trigger
 language plpgsql
+set search_path = pg_catalog, public
 as $$
 begin
   new.updated_at = now();

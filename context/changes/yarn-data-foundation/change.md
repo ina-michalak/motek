@@ -1,7 +1,7 @@
 ---
 change_id: yarn-data-foundation
 title: Fundament danych biblioteki włóczek (tabela + RLS + typy)
-status: implemented
+status: impl_reviewed
 created: 2026-08-23
 updated: 2026-08-23
 archived_at: null
