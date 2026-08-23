@@ -20,7 +20,10 @@ async function resolveYarnPhotoUrl(supabase: SupabaseClient, photoPath: string |
     .from(YARN_PHOTOS_BUCKET)
     .createSignedUrl(photoPath, PHOTO_SIGNED_URL_TTL_SECONDS);
 
-  if (error) return null;
+  if (error) {
+    console.warn(`Failed to create signed URL for yarn photo "${photoPath}":`, error);
+    return null;
+  }
   return data.signedUrl;
 }
 
@@ -86,6 +89,13 @@ export async function attachYarnPhoto(
   yarnId: string,
   file: File,
 ): Promise<void> {
+  const { data: existing, error: fetchError } = (await supabase
+    .from("yarns")
+    .select("photo_url")
+    .eq("id", yarnId)
+    .maybeSingle()) as { data: { photo_url: string | null } | null; error: PostgrestError | null };
+  if (fetchError) throw fetchError;
+
   const path = `${userId}/${yarnId}-${sanitizeFileName(file.name)}`;
 
   const { error: uploadError } = await supabase.storage
@@ -93,6 +103,20 @@ export async function attachYarnPhoto(
     .upload(path, file, { contentType: file.type, upsert: false });
   if (uploadError) throw uploadError;
 
-  const { error: updateError } = await supabase.from("yarns").update({ photo_url: path }).eq("id", yarnId);
-  if (updateError) throw updateError;
+  const { data: updated, error: updateError } = (await supabase
+    .from("yarns")
+    .update({ photo_url: path })
+    .eq("id", yarnId)
+    .select("id")) as { data: { id: string }[] | null; error: PostgrestError | null };
+
+  if (updateError || !updated || updated.length === 0) {
+    await supabase.storage.from(YARN_PHOTOS_BUCKET).remove([path]);
+    if (updateError) throw updateError;
+    throw new Error("Photo update matched no yarn row");
+  }
+
+  const previousPath = existing?.photo_url;
+  if (previousPath && previousPath !== path) {
+    await supabase.storage.from(YARN_PHOTOS_BUCKET).remove([previousPath]);
+  }
 }

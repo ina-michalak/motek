@@ -355,8 +355,8 @@ Brak istniejących danych do migracji — to pierwszy zapis do tabeli `yarns` w 
 
 #### Automatyczne
 
-- [x] 2.1 `npx astro check` przechodzi
-- [x] 2.2 `npm run lint` przechodzi
+- [x] 2.1 `npx astro check` przechodzi — f94e8f5
+- [x] 2.2 `npm run lint` przechodzi — f94e8f5
 
 #### Ręczne
 
