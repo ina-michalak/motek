@@ -343,20 +343,20 @@ Brak istniejących danych do migracji — to pierwszy zapis do tabeli `yarns` w 
 
 #### Automatyczne
 
-- [x] 1.1 `npm run lint` przechodzi po dodaniu nowych plików
-- [x] 1.2 `npx astro check` przechodzi bez błędów typów
-- [x] 1.3 Migracja aplikuje się czysto lokalnie
+- [x] 1.1 `npm run lint` przechodzi po dodaniu nowych plików — be018c5
+- [x] 1.2 `npx astro check` przechodzi bez błędów typów — be018c5
+- [x] 1.3 Migracja aplikuje się czysto lokalnie — be018c5
 
 #### Ręczne
 
-- [x] 1.4 Bucket `yarn-photos` i cztery polityki RLS widoczne w Supabase Studio
+- [x] 1.4 Bucket `yarn-photos` i cztery polityki RLS widoczne w Supabase Studio — be018c5
 
 ### Faza 2: Warstwa dostępu do danych
 
 #### Automatyczne
 
-- [ ] 2.1 `npx astro check` przechodzi
-- [ ] 2.2 `npm run lint` przechodzi
+- [x] 2.1 `npx astro check` przechodzi
+- [x] 2.2 `npm run lint` przechodzi
 
 #### Ręczne
 
