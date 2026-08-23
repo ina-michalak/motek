@@ -167,21 +167,21 @@ Brak istniejących danych do migracji — to pierwsza tabela domenowa w projekci
 
 #### Automatyczne
 
-- [x] 1.1 Migracja stosuje się czysto lokalnie: `npx supabase db reset`
+- [x] 1.1 Migracja stosuje się czysto lokalnie: `npx supabase db reset` — 580f110
 
 #### Ręczne
 
-- [x] 1.3 Izolacja RLS potwierdzona między User A i User B przez REST API (nie przez Supabase Studio)
-- [x] 1.4 Ograniczenie ilości (co najmniej jedna jednostka) odrzuca niepoprawny wiersz
-- [x] 1.5 `updated_at` zmienia się automatycznie przy aktualizacji
+- [x] 1.3 Izolacja RLS potwierdzona między User A i User B przez REST API (nie przez Supabase Studio) — 580f110
+- [x] 1.4 Ograniczenie ilości (co najmniej jedna jednostka) odrzuca niepoprawny wiersz — 580f110
+- [x] 1.5 `updated_at` zmienia się automatycznie przy aktualizacji — 580f110
 
 ### Faza 2: Podstawowe typy TypeScript
 
 #### Automatyczne
 
-- [ ] 2.1 Sprawdzanie typów przechodzi: `npx astro check`
-- [ ] 2.2 Linting przechodzi: `npm run lint`
+- [x] 2.1 Sprawdzanie typów przechodzi: `npx astro check`
+- [x] 2.2 Linting przechodzi: `npm run lint` (zweryfikowano w izolacji dla `src/types.ts`; pełny `npm run lint` w repo blokowany przez przedistniejące błędy CRLF w niezwiązanych plikach — poza zakresem tej fazy)
 
 #### Ręczne
 
-- [ ] 2.3 Pola `Yarn` ręcznie porównane z kolumnami tabeli `yarns` — zgodność nazw i nullability
+- [x] 2.3 Pola `Yarn` ręcznie porównane z kolumnami tabeli `yarns` — zgodność nazw i nullability
