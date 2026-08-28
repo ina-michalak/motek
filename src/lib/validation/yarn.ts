@@ -36,7 +36,15 @@ const emptyToUndefined = (value: unknown) =>
 const optionalTrimmedString = (maxLength: number) =>
   z.preprocess(emptyToUndefined, z.string().trim().min(1).max(maxLength).optional());
 
-const optionalNumber = z.preprocess(emptyToUndefined, z.coerce.number().optional());
+const optionalNonNegativeNumber = z.preprocess(
+  emptyToUndefined,
+  z.coerce.number().nonnegative("Wartość nie może być ujemna").optional(),
+);
+
+const optionalPositiveNumber = z.preprocess(
+  emptyToUndefined,
+  z.coerce.number().positive("Wartość musi być większa od zera").optional(),
+);
 
 const compositionRowSchema = z.object({
   fiber: z.string().trim().min(1, "Podaj rodzaj włókna"),
@@ -56,13 +64,13 @@ export const createYarnSchema = z
   .object({
     name: z.string().trim().min(1, "Nazwa jest wymagana").max(200),
     manufacturer: z.string().trim().min(1, "Producent jest wymagany").max(200),
-    quantity_skeins: optionalNumber,
-    quantity_grams: optionalNumber,
+    quantity_skeins: optionalNonNegativeNumber,
+    quantity_grams: optionalNonNegativeNumber,
     color: optionalTrimmedString(200),
     dye_lot: optionalTrimmedString(200),
     composition: compositionSchema,
-    needle_size_mm: optionalNumber,
-    hook_size_mm: optionalNumber,
+    needle_size_mm: optionalPositiveNumber,
+    hook_size_mm: optionalPositiveNumber,
     gauge_note: optionalTrimmedString(1000),
     rating: z.preprocess(emptyToUndefined, z.coerce.number().int().min(1).max(5).optional()),
     note: optionalTrimmedString(1000),

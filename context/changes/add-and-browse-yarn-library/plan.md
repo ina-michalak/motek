@@ -360,19 +360,19 @@ Brak istniejących danych do migracji — to pierwszy zapis do tabeli `yarns` w 
 
 #### Ręczne
 
-- [ ] 2.3 Ręczna weryfikacja odczytu/zapisu przez serwis na koncie testowym
+- [x] 2.3 Ręczna weryfikacja odczytu/zapisu przez serwis na koncie testowym
 
 ### Faza 3: API endpoint tworzenia włóczki
 
 #### Automatyczne
 
-- [ ] 3.1 `npx astro check` i `npm run lint` przechodzą
+- [x] 3.1 `npx astro check` i `npm run lint` przechodzą
 
 #### Ręczne
 
-- [ ] 3.2 POST z poprawnymi danymi zapisuje wiersz i przekierowuje na `/dashboard`
-- [ ] 3.3 POST z brakującymi wymaganymi polami przekierowuje z komunikatem błędu
-- [ ] 3.4 POST z niepoprawną sumą składu zwraca błąd walidacji
+- [x] 3.2 POST z poprawnymi danymi zapisuje wiersz i przekierowuje na `/dashboard`
+- [x] 3.3 POST z brakującymi wymaganymi polami przekierowuje z komunikatem błędu
+- [x] 3.4 POST z niepoprawną sumą składu zwraca błąd walidacji
 
 ### Faza 4: Formularz dodawania włóczki
 
