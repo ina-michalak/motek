@@ -1,5 +1,6 @@
 ---
 import { Star } from "lucide-react";
+import { z } from "zod";
 import Layout from "@/layouts/Layout.astro";
 import YarnPhotoPlaceholder from "@/components/yarn/YarnPhotoPlaceholder.astro";
 import { createClient } from "@/lib/supabase";
@@ -9,9 +10,10 @@ export const prerender = false;
 
 const { user } = Astro.locals;
 const { id } = Astro.params;
+const isValidId = id != null && z.uuid().safeParse(id).success;
 
 const supabase = createClient(Astro.request.headers, Astro.cookies);
-const yarn = supabase && user && id ? await getYarnById(supabase, id) : null;
+const yarn = supabase && user && isValidId ? await getYarnById(supabase, user.id, id) : null;
 
 if (!yarn) {
   Astro.response.status = 302;

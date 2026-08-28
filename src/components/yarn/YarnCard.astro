@@ -28,6 +28,7 @@ const rating = yarn.rating;
       </div>
       <p class="mt-2 truncate text-sm font-medium text-white">{yarn.name}</p>
       <p class="truncate text-xs text-blue-100/60">{yarn.manufacturer}</p>
+      {yarn.color && <p class="truncate text-xs text-blue-100/50">{yarn.color}</p>}
       {
         rating && (
           <div class="mt-1 flex items-center gap-0.5">

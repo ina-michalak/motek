@@ -45,8 +45,17 @@ export async function listYarns(supabase: SupabaseClient, userId: string): Promi
   );
 }
 
-export async function getYarnById(supabase: SupabaseClient, id: string): Promise<YarnWithPhotoUrl | null> {
-  const { data, error } = (await supabase.from("yarns").select("*").eq("id", id).maybeSingle()) as {
+export async function getYarnById(
+  supabase: SupabaseClient,
+  userId: string,
+  id: string,
+): Promise<YarnWithPhotoUrl | null> {
+  const { data, error } = (await supabase
+    .from("yarns")
+    .select("*")
+    .eq("id", id)
+    .eq("user_id", userId)
+    .maybeSingle()) as {
     data: Yarn | null;
     error: PostgrestError | null;
   };
