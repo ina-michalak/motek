@@ -360,33 +360,33 @@ Brak istniejących danych do migracji — to pierwszy zapis do tabeli `yarns` w 
 
 #### Ręczne
 
-- [x] 2.3 Ręczna weryfikacja odczytu/zapisu przez serwis na koncie testowym
+- [x] 2.3 Ręczna weryfikacja odczytu/zapisu przez serwis na koncie testowym — 6dc8f1d
 
 ### Faza 3: API endpoint tworzenia włóczki
 
 #### Automatyczne
 
-- [x] 3.1 `npx astro check` i `npm run lint` przechodzą
+- [x] 3.1 `npx astro check` i `npm run lint` przechodzą — 6dc8f1d
 
 #### Ręczne
 
-- [x] 3.2 POST z poprawnymi danymi zapisuje wiersz i przekierowuje na `/dashboard`
-- [x] 3.3 POST z brakującymi wymaganymi polami przekierowuje z komunikatem błędu
-- [x] 3.4 POST z niepoprawną sumą składu zwraca błąd walidacji
+- [x] 3.2 POST z poprawnymi danymi zapisuje wiersz i przekierowuje na `/dashboard` — 6dc8f1d
+- [x] 3.3 POST z brakującymi wymaganymi polami przekierowuje z komunikatem błędu — 6dc8f1d
+- [x] 3.4 POST z niepoprawną sumą składu zwraca błąd walidacji — 6dc8f1d
 
 ### Faza 4: Formularz dodawania włóczki
 
 #### Automatyczne
 
-- [ ] 4.1 `npx astro check` i `npm run lint` przechodzą
+- [x] 4.1 `npx astro check` i `npm run lint` przechodzą
 
 #### Ręczne
 
-- [ ] 4.2 Pełny formularz (w tym zdjęcie i skład sumujący się do 100%) zapisuje się poprawnie
-- [ ] 4.3 Brak nazwy / producenta / ilości blokuje submit z błędem inline
-- [ ] 4.4 Niepoprawna suma składu pokazuje błąd inline
-- [ ] 4.5 Zapis bez zdjęcia działa poprawnie
-- [ ] 4.6 Kliknięcie aktywnej gwiazdki czyści ocenę
+- [x] 4.2 Pełny formularz (w tym zdjęcie i skład sumujący się do 100%) zapisuje się poprawnie
+- [x] 4.3 Brak nazwy / producenta / ilości blokuje submit z błędem inline
+- [x] 4.4 Niepoprawna suma składu pokazuje błąd inline
+- [x] 4.5 Zapis bez zdjęcia działa poprawnie
+- [x] 4.6 Kliknięcie aktywnej gwiazdki czyści ocenę
 
 ### Faza 5: Biblioteka (lista) i szczegóły włóczki
 
