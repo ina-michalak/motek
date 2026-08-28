@@ -392,13 +392,13 @@ Brak istniejących danych do migracji — to pierwszy zapis do tabeli `yarns` w 
 
 #### Automatyczne
 
-- [ ] 5.1 `npx astro check` i `npm run lint` przechodzą
-- [ ] 5.2 `npm run build` kończy się sukcesem
+- [x] 5.1 `npx astro check` i `npm run lint` przechodzą
+- [x] 5.2 `npm run build` kończy się sukcesem
 
 #### Ręczne
 
 - [ ] 5.3 Pusta biblioteka pokazuje stan pusty z CTA
-- [ ] 5.4 Biblioteka z włóczkami pokazuje siatkę kart z poprawnymi zdjęciami/placeholderami
-- [ ] 5.5 Kliknięcie karty otwiera poprawne szczegóły
+- [x] 5.4 Biblioteka z włóczkami pokazuje siatkę kart z poprawnymi zdjęciami/placeholderami
+- [x] 5.5 Kliknięcie karty otwiera poprawne szczegóły
 - [ ] 5.6 Próba dostępu do cudzej włóczki przekierowuje bez wycieku danych
-- [ ] 5.7 Dostęp bez zalogowania przekierowuje do `/auth/signin`
+- [x] 5.7 Dostęp bez zalogowania przekierowuje do `/auth/signin`

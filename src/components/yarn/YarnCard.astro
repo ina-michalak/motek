@@ -1,0 +1,42 @@
+---
+import { Star } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import YarnPhotoPlaceholder from "@/components/yarn/YarnPhotoPlaceholder.astro";
+import type { Yarn } from "@/types";
+
+interface Props {
+  yarn: Yarn & { photoUrl: string | null };
+}
+
+const { yarn } = Astro.props;
+const rating = yarn.rating;
+---
+
+<a href={`/yarns/${yarn.id}`} class="group block">
+  <Card
+    className="gap-2 border-white/10 bg-white/10 py-3 text-white backdrop-blur-xl transition-colors group-hover:bg-white/15"
+  >
+    <CardContent className="px-3">
+      <div class="aspect-square overflow-hidden rounded-lg bg-white/5">
+        {
+          yarn.photoUrl ? (
+            <img src={yarn.photoUrl} alt={yarn.name} class="h-full w-full object-cover" loading="lazy" />
+          ) : (
+            <YarnPhotoPlaceholder class="h-full w-full p-7 text-blue-100/30" />
+          )
+        }
+      </div>
+      <p class="mt-2 truncate text-sm font-medium text-white">{yarn.name}</p>
+      <p class="truncate text-xs text-blue-100/60">{yarn.manufacturer}</p>
+      {
+        rating && (
+          <div class="mt-1 flex items-center gap-0.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star className={`size-3 ${i < rating ? "fill-yellow-300 text-yellow-300" : "text-white/20"}`} />
+            ))}
+          </div>
+        )
+      }
+    </CardContent>
+  </Card>
+</a>
