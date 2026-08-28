@@ -5,14 +5,19 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "@/components/auth/SubmitButton";
 import { ServerError } from "@/components/auth/ServerError";
-import { CompositionRows } from "@/components/yarn/CompositionRows";
+import { CompositionRows, type CompositionRow } from "@/components/yarn/CompositionRows";
 import { StarRatingInput } from "@/components/yarn/StarRatingInput";
-import { createYarnSchema, KNOWN_MANUFACTURERS, COMMON_NEEDLE_HOOK_SIZES_MM } from "@/lib/validation/yarn";
+import {
+  createYarnSchema,
+  validateYarnPhoto,
+  KNOWN_MANUFACTURERS,
+  COMMON_NEEDLE_HOOK_SIZES_MM,
+} from "@/lib/validation/yarn";
 import { cn } from "@/lib/utils";
-import type { YarnFiberComposition } from "@/types";
 
-const MAX_PHOTO_SIZE_BYTES = 5 * 1024 * 1024;
-const ACCEPTED_PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"];
+function serializeComposition(composition: CompositionRow[]): string {
+  return JSON.stringify(composition.map(({ fiber, percent }) => ({ fiber, percent })));
+}
 
 const fieldClass =
   "border-white/20 bg-white/10 text-white placeholder-white/40 focus-visible:border-purple-400 focus-visible:ring-purple-400/50";
@@ -59,7 +64,7 @@ function FieldError({ message }: { message: string }) {
 
 export default function AddYarnForm({ serverError }: Props) {
   const [values, setValues] = useState<TextValues>(initialValues);
-  const [composition, setComposition] = useState<YarnFiberComposition[]>([]);
+  const [composition, setComposition] = useState<CompositionRow[]>([]);
   const [rating, setRating] = useState<number | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
@@ -84,7 +89,7 @@ export default function AddYarnForm({ serverError }: Props) {
     });
   }
 
-  function handleCompositionChange(next: YarnFiberComposition[]) {
+  function handleCompositionChange(next: CompositionRow[]) {
     setComposition(next);
     setErrors((prev) => ({ ...prev, composition: undefined }));
   }
@@ -97,14 +102,9 @@ export default function AddYarnForm({ serverError }: Props) {
       setPhotoError(null);
       return;
     }
-    if (!ACCEPTED_PHOTO_TYPES.includes(file.type)) {
-      setPhotoError("Dozwolone formaty: JPEG, PNG, WEBP");
-      e.target.value = "";
-      setPhotoPreview(null);
-      return;
-    }
-    if (file.size > MAX_PHOTO_SIZE_BYTES) {
-      setPhotoError("Zdjęcie nie może przekraczać 5MB");
+    const validationError = validateYarnPhoto(file);
+    if (validationError) {
+      setPhotoError(validationError);
       e.target.value = "";
       setPhotoPreview(null);
       return;
@@ -116,7 +116,7 @@ export default function AddYarnForm({ serverError }: Props) {
   function validate(): { valid: boolean; firstErrorKey?: string } {
     const result = createYarnSchema.safeParse({
       ...values,
-      composition: JSON.stringify(composition),
+      composition: serializeComposition(composition),
       rating: rating ?? "",
     });
 
@@ -170,7 +170,7 @@ export default function AddYarnForm({ serverError }: Props) {
       onSubmit={handleSubmit}
       noValidate
     >
-      <input type="hidden" name="composition" value={JSON.stringify(composition)} />
+      <input type="hidden" name="composition" value={serializeComposition(composition)} />
       <input type="hidden" name="rating" value={rating ?? ""} />
 
       <ServerError message={hasErrors ? "Formularz zawiera błędy — popraw zaznaczone pola." : null} />

@@ -378,15 +378,15 @@ Brak istniejących danych do migracji — to pierwszy zapis do tabeli `yarns` w 
 
 #### Automatyczne
 
-- [x] 4.1 `npx astro check` i `npm run lint` przechodzą
+- [x] 4.1 `npx astro check` i `npm run lint` przechodzą — ab3a168
 
 #### Ręczne
 
-- [x] 4.2 Pełny formularz (w tym zdjęcie i skład sumujący się do 100%) zapisuje się poprawnie
-- [x] 4.3 Brak nazwy / producenta / ilości blokuje submit z błędem inline
-- [x] 4.4 Niepoprawna suma składu pokazuje błąd inline
-- [x] 4.5 Zapis bez zdjęcia działa poprawnie
-- [x] 4.6 Kliknięcie aktywnej gwiazdki czyści ocenę
+- [x] 4.2 Pełny formularz (w tym zdjęcie i skład sumujący się do 100%) zapisuje się poprawnie — ab3a168
+- [x] 4.3 Brak nazwy / producenta / ilości blokuje submit z błędem inline — ab3a168
+- [x] 4.4 Niepoprawna suma składu pokazuje błąd inline — ab3a168
+- [x] 4.5 Zapis bez zdjęcia działa poprawnie — ab3a168
+- [x] 4.6 Kliknięcie aktywnej gwiazdki czyści ocenę — ab3a168
 
 ### Faza 5: Biblioteka (lista) i szczegóły włóczki
 

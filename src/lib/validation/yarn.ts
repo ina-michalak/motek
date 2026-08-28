@@ -92,3 +92,16 @@ export const createYarnSchema = z
   );
 
 export type CreateYarnInput = z.infer<typeof createYarnSchema>;
+
+export const ACCEPTED_PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
+export const MAX_PHOTO_SIZE_BYTES = 5 * 1024 * 1024;
+
+export function validateYarnPhoto(file: File): string | null {
+  if (!ACCEPTED_PHOTO_TYPES.includes(file.type as (typeof ACCEPTED_PHOTO_TYPES)[number])) {
+    return "Dozwolone formaty: JPEG, PNG, WEBP";
+  }
+  if (file.size > MAX_PHOTO_SIZE_BYTES) {
+    return "Zdjęcie nie może przekraczać 5MB";
+  }
+  return null;
+}

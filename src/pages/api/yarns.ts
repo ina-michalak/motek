@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { createClient } from "@/lib/supabase";
-import { createYarnSchema } from "@/lib/validation/yarn";
+import { createYarnSchema, validateYarnPhoto } from "@/lib/validation/yarn";
 import { attachYarnPhoto, createYarn } from "@/lib/services/yarns";
 
 export const prerender = false;
@@ -43,6 +43,14 @@ export const POST: APIRoute = async (context) => {
     return context.redirect(`/yarns/new?error=${encodeURIComponent(message)}`);
   }
 
+  const photo = form.get("photo");
+  if (photo instanceof File && photo.size > 0) {
+    const photoError = validateYarnPhoto(photo);
+    if (photoError) {
+      return context.redirect(`/yarns/new?error=${encodeURIComponent(photoError)}`);
+    }
+  }
+
   let yarn;
   try {
     yarn = await createYarn(supabase, context.locals.user.id, parsed.data);
@@ -52,7 +60,6 @@ export const POST: APIRoute = async (context) => {
     return context.redirect(`/yarns/new?error=${encodeURIComponent(message)}`);
   }
 
-  const photo = form.get("photo");
   if (photo instanceof File && photo.size > 0) {
     try {
       await attachYarnPhoto(supabase, context.locals.user.id, yarn.id, photo);

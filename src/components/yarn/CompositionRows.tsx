@@ -2,38 +2,43 @@ import { Plus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { COMMON_FIBERS } from "@/lib/validation/yarn";
 import { cn } from "@/lib/utils";
-import type { YarnFiberComposition } from "@/types";
 
 const rowInputClass =
   "border-white/20 bg-white/10 text-white placeholder-white/40 focus-visible:border-purple-400 focus-visible:ring-purple-400/50";
 
+export interface CompositionRow {
+  id: string;
+  fiber: string;
+  percent: string;
+}
+
 interface CompositionRowsProps {
-  value: YarnFiberComposition[];
-  onChange: (value: YarnFiberComposition[]) => void;
+  value: CompositionRow[];
+  onChange: (value: CompositionRow[]) => void;
 }
 
 export function CompositionRows({ value, onChange }: CompositionRowsProps) {
-  function updateRow(index: number, patch: Partial<YarnFiberComposition>) {
-    onChange(value.map((row, i) => (i === index ? { ...row, ...patch } : row)));
+  function updateRow(id: string, patch: Partial<CompositionRow>) {
+    onChange(value.map((row) => (row.id === id ? { ...row, ...patch } : row)));
   }
 
-  function removeRow(index: number) {
-    onChange(value.filter((_, i) => i !== index));
+  function removeRow(id: string) {
+    onChange(value.filter((row) => row.id !== id));
   }
 
   function addRow() {
-    onChange([...value, { fiber: "", percent: 0 }]);
+    onChange([...value, { id: crypto.randomUUID(), fiber: "", percent: "" }]);
   }
 
   return (
     <div className="space-y-2">
-      {value.map((row, index) => (
-        <div key={index} className="flex items-center gap-2">
+      {value.map((row) => (
+        <div key={row.id} className="flex items-center gap-2">
           <Input
             list="fibers"
             value={row.fiber}
             onChange={(e) => {
-              updateRow(index, { fiber: e.target.value });
+              updateRow(row.id, { fiber: e.target.value });
             }}
             placeholder="Rodzaj włókna"
             aria-label="Rodzaj włókna"
@@ -46,7 +51,7 @@ export function CompositionRows({ value, onChange }: CompositionRowsProps) {
             step="any"
             value={row.percent}
             onChange={(e) => {
-              updateRow(index, { percent: Number(e.target.value) });
+              updateRow(row.id, { percent: e.target.value });
             }}
             placeholder="%"
             aria-label="Procent składu"
@@ -55,7 +60,7 @@ export function CompositionRows({ value, onChange }: CompositionRowsProps) {
           <button
             type="button"
             onClick={() => {
-              removeRow(index);
+              removeRow(row.id);
             }}
             aria-label="Usuń wiersz składu"
             className="text-white/40 transition-colors hover:text-red-300"
