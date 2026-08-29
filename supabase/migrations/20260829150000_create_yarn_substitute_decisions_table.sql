@@ -5,13 +5,14 @@ create table yarn_substitute_decisions (
   user_id uuid not null default auth.uid() references auth.users (id) on delete cascade,
   yarn_id uuid not null references yarns (id) on delete cascade,
   substitute_yarn_id uuid not null references yarns (id) on delete cascade,
-  status text not null check (status in ('accepted', 'rejected')),
+  status text not null,
 
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
 
   constraint yarn_substitute_decisions_not_self check (yarn_id <> substitute_yarn_id),
-  constraint yarn_substitute_decisions_unique_pair unique (user_id, yarn_id, substitute_yarn_id)
+  constraint yarn_substitute_decisions_unique_pair unique (user_id, yarn_id, substitute_yarn_id),
+  constraint yarn_substitute_decisions_status_valid check (status in ('accepted', 'rejected'))
 );
 
 create index yarn_substitute_decisions_user_yarn_idx on yarn_substitute_decisions (user_id, yarn_id);

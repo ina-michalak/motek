@@ -287,14 +287,14 @@ Nowa tabela, brak istniejących danych do migracji. `on delete cascade` na obu F
 
 #### Automatyczne
 
-- [x] 1.1 Migracja stosuje się czysto lokalnie: `npx supabase db reset`
-- [x] 1.2 Sprawdzanie typów przechodzi: `npx astro check`
-- [x] 1.3 Linting przechodzi: `npm run lint`
+- [x] 1.1 Migracja stosuje się czysto lokalnie: `npx supabase db reset` — 9f1f50d
+- [x] 1.2 Sprawdzanie typów przechodzi: `npx astro check` — 9f1f50d
+- [x] 1.3 Linting przechodzi: `npm run lint` — 9f1f50d
 
 #### Ręczne
 
-- [x] 1.4 Tabela `yarn_substitute_decisions` widoczna w Supabase Studio z 4 politykami RLS i grantami
-- [x] 1.5 RLS odrzuca insert z `user_id` innym niż `auth.uid()`
+- [x] 1.4 Tabela `yarn_substitute_decisions` widoczna w Supabase Studio z 4 politykami RLS i grantami — 9f1f50d
+- [x] 1.5 RLS odrzuca insert z `user_id` innym niż `auth.uid()` — 9f1f50d
 
 ### Faza 2: Algorytm dopasowania
 
