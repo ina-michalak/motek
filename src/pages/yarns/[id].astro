@@ -5,6 +5,8 @@ import Layout from "@/layouts/Layout.astro";
 import YarnPhotoPlaceholder from "@/components/yarn/YarnPhotoPlaceholder.astro";
 import { createClient } from "@/lib/supabase";
 import { getYarnById } from "@/lib/services/yarns";
+import { listSubstituteSuggestions, getAcceptedSubstitutes } from "@/lib/services/substitutes";
+import SubstituteSuggestions from "@/components/yarn/SubstituteSuggestions";
 
 export const prerender = false;
 
@@ -14,6 +16,9 @@ const isValidId = id != null && z.uuid().safeParse(id).success;
 
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 const yarn = supabase && user && isValidId ? await getYarnById(supabase, user.id, id) : null;
+
+const suggestions = supabase && user && yarn ? await listSubstituteSuggestions(supabase, user.id, yarn.id) : [];
+const acceptedSubstitutes = supabase && user && yarn ? await getAcceptedSubstitutes(supabase, user.id, yarn.id) : [];
 
 if (!yarn) {
   Astro.response.status = 302;
@@ -104,6 +109,13 @@ const rating = yarn?.rating ?? null;
                   <p class="text-sm whitespace-pre-wrap">{yarn.note}</p>
                 </section>
               )}
+
+              <SubstituteSuggestions
+                yarnId={yarn.id}
+                initialSuggestions={suggestions}
+                initialAccepted={acceptedSubstitutes}
+                client:load
+              />
             </div>
           </div>
         </div>

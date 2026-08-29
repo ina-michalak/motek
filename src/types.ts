@@ -22,3 +22,15 @@ export interface Yarn {
   created_at: string;
   updated_at: string;
 }
+
+export type SubstituteDecisionStatus = "accepted" | "rejected";
+
+export interface YarnSubstituteDecision {
+  id: string;
+  user_id: string;
+  yarn_id: string;
+  substitute_yarn_id: string;
+  status: SubstituteDecisionStatus;
+  created_at: string;
+  updated_at: string;
+}
