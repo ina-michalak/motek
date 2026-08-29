@@ -300,21 +300,21 @@ Nowa tabela, brak istniejących danych do migracji. `on delete cascade` na obu F
 
 #### Automatyczne
 
-- [x] 2.1 Testy jednostkowe przechodzą: `npm run test`
-- [x] 2.2 Sprawdzanie typów przechodzi: `npx astro check`
-- [x] 2.3 Linting przechodzi: `npm run lint`
+- [x] 2.1 Testy jednostkowe przechodzą: `npm run test` — 4f06173
+- [x] 2.2 Sprawdzanie typów przechodzi: `npx astro check` — 4f06173
+- [x] 2.3 Linting przechodzi: `npm run lint` — 4f06173
 
 ### Faza 3: API route accept/reject
 
 #### Automatyczne
 
-- [ ] 3.1 Sprawdzanie typów przechodzi: `npx astro check`
-- [ ] 3.2 Linting przechodzi: `npm run lint`
+- [x] 3.1 Sprawdzanie typów przechodzi: `npx astro check`
+- [x] 3.2 Linting przechodzi: `npm run lint`
 
 #### Ręczne
 
-- [ ] 3.3 Żądanie bez sesji zwraca 401
-- [ ] 3.4 Poprawne żądanie zapisuje wiersz i zwraca 200
+- [x] 3.3 Żądanie bez sesji zwraca 401
+- [x] 3.4 Poprawne żądanie zapisuje wiersz i zwraca 200
 - [ ] 3.5 Żądanie z cudzym `substituteYarnId` jest odrzucane
 
 ### Faza 4: Frontend — sekcja zamienników
