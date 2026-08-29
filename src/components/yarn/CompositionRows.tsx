@@ -1,10 +1,6 @@
 import { Plus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { COMMON_FIBERS } from "@/lib/validation/yarn";
-import { cn } from "@/lib/utils";
-
-const rowInputClass =
-  "border-white/20 bg-white/10 text-white placeholder-white/40 focus-visible:border-purple-400 focus-visible:ring-purple-400/50";
 
 export interface CompositionRow {
   id: string;
@@ -42,7 +38,7 @@ export function CompositionRows({ value, onChange }: CompositionRowsProps) {
             }}
             placeholder="Rodzaj włókna"
             aria-label="Rodzaj włókna"
-            className={cn(rowInputClass, "flex-1")}
+            className="flex-1"
           />
           <Input
             type="number"
@@ -55,7 +51,7 @@ export function CompositionRows({ value, onChange }: CompositionRowsProps) {
             }}
             placeholder="%"
             aria-label="Procent składu"
-            className={cn(rowInputClass, "w-20")}
+            className="w-20"
           />
           <button
             type="button"
@@ -63,7 +59,7 @@ export function CompositionRows({ value, onChange }: CompositionRowsProps) {
               removeRow(row.id);
             }}
             aria-label="Usuń wiersz składu"
-            className="text-white/40 transition-colors hover:text-red-300"
+            className="text-muted-foreground hover:text-destructive transition-colors"
           >
             <Trash2 className="size-4" />
           </button>
@@ -76,11 +72,7 @@ export function CompositionRows({ value, onChange }: CompositionRowsProps) {
         ))}
       </datalist>
 
-      <button
-        type="button"
-        onClick={addRow}
-        className="flex items-center gap-1 text-sm text-purple-300 hover:underline"
-      >
+      <button type="button" onClick={addRow} className="text-primary flex items-center gap-1 text-sm hover:underline">
         <Plus className="size-4" />
         Dodaj włókno
       </button>

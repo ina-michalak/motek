@@ -13,15 +13,12 @@ import {
   KNOWN_MANUFACTURERS,
   COMMON_NEEDLE_HOOK_SIZES_MM,
 } from "@/lib/validation/yarn";
-import { cn } from "@/lib/utils";
 
 function serializeComposition(composition: CompositionRow[]): string {
   return JSON.stringify(composition.map(({ fiber, percent }) => ({ fiber, percent })));
 }
 
-const fieldClass =
-  "border-white/20 bg-white/10 text-white placeholder-white/40 focus-visible:border-purple-400 focus-visible:ring-purple-400/50";
-const labelClass = "mb-1 block text-sm text-blue-100/80";
+const labelClass = "mb-1 block";
 
 interface Props {
   serverError?: string | null;
@@ -55,7 +52,7 @@ const initialValues: TextValues = {
 
 function FieldError({ message }: { message: string }) {
   return (
-    <p className="mt-1 flex items-center gap-1 text-xs text-red-300">
+    <p className="text-destructive mt-1 flex items-center gap-1 text-xs">
       <CircleAlert className="size-3" />
       {message}
     </p>
@@ -187,7 +184,7 @@ export default function AddYarnForm({ serverError }: Props) {
             updateField("name", e.target.value);
           }}
           placeholder="np. Merino Extrafine"
-          className={cn(fieldClass, errors.name && "border-red-400/60 focus-visible:ring-red-400/50")}
+          aria-invalid={!!errors.name}
         />
         {errors.name && <FieldError message={errors.name} />}
       </div>
@@ -205,7 +202,7 @@ export default function AddYarnForm({ serverError }: Props) {
             updateField("manufacturer", e.target.value);
           }}
           placeholder="np. Drops"
-          className={cn(fieldClass, errors.manufacturer && "border-red-400/60 focus-visible:ring-red-400/50")}
+          aria-invalid={!!errors.manufacturer}
         />
         <datalist id="manufacturers">
           {KNOWN_MANUFACTURERS.map((manufacturer) => (
@@ -231,7 +228,7 @@ export default function AddYarnForm({ serverError }: Props) {
               onChange={(e) => {
                 updateField("quantity_skeins", e.target.value);
               }}
-              className={cn(fieldClass, quantityError && "border-red-400/60 focus-visible:ring-red-400/50")}
+              aria-invalid={!!quantityError}
             />
           </div>
           <div>
@@ -248,7 +245,7 @@ export default function AddYarnForm({ serverError }: Props) {
               onChange={(e) => {
                 updateField("quantity_grams", e.target.value);
               }}
-              className={cn(fieldClass, quantityError && "border-red-400/60 focus-visible:ring-red-400/50")}
+              aria-invalid={!!quantityError}
             />
           </div>
         </div>
@@ -267,7 +264,6 @@ export default function AddYarnForm({ serverError }: Props) {
             onChange={(e) => {
               updateField("color", e.target.value);
             }}
-            className={fieldClass}
           />
         </div>
         <div>
@@ -281,7 +277,6 @@ export default function AddYarnForm({ serverError }: Props) {
             onChange={(e) => {
               updateField("dye_lot", e.target.value);
             }}
-            className={fieldClass}
           />
         </div>
       </div>
@@ -308,7 +303,6 @@ export default function AddYarnForm({ serverError }: Props) {
             onChange={(e) => {
               updateField("needle_size_mm", e.target.value);
             }}
-            className={fieldClass}
           />
           <datalist id="needle-sizes">
             {COMMON_NEEDLE_HOOK_SIZES_MM.map((size) => (
@@ -331,7 +325,6 @@ export default function AddYarnForm({ serverError }: Props) {
             onChange={(e) => {
               updateField("hook_size_mm", e.target.value);
             }}
-            className={fieldClass}
           />
           <datalist id="hook-sizes">
             {COMMON_NEEDLE_HOOK_SIZES_MM.map((size) => (
@@ -352,7 +345,6 @@ export default function AddYarnForm({ serverError }: Props) {
           onChange={(e) => {
             updateField("gauge_note", e.target.value);
           }}
-          className={fieldClass}
         />
       </div>
 
@@ -372,7 +364,6 @@ export default function AddYarnForm({ serverError }: Props) {
           onChange={(e) => {
             updateField("note", e.target.value);
           }}
-          className={fieldClass}
         />
       </div>
 
@@ -386,7 +377,7 @@ export default function AddYarnForm({ serverError }: Props) {
           type="file"
           accept="image/jpeg,image/png,image/webp"
           onChange={handlePhotoChange}
-          className="block w-full text-sm text-blue-100/80 file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-sm file:text-white hover:file:bg-white/20"
+          className="text-muted-foreground file:bg-secondary file:text-foreground hover:file:bg-accent block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:px-3 file:py-2 file:text-sm"
         />
         {photoError && <FieldError message={photoError} />}
         {photoPreview && (

@@ -22,9 +22,9 @@ export function StarRatingInput({ value, onChange }: StarRatingInputProps) {
             }}
             aria-pressed={filled}
             aria-label={`${star} ${star === 1 ? "gwiazdka" : "gwiazdek"}`}
-            className="text-white/40 transition-colors hover:text-yellow-300"
+            className="text-muted-foreground hover:text-warning-border transition-colors"
           >
-            <Star className={cn("size-6", filled && "fill-yellow-300 text-yellow-300")} />
+            <Star className={cn("size-6", filled && "fill-warning-border text-warning-border")} />
           </button>
         );
       })}

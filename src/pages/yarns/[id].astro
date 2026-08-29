@@ -29,34 +29,32 @@ const quantityLabel = yarn
       .join(" / ")
   : "";
 
-const chipClass = "inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-sm text-blue-100/90";
+const chipClass = "bg-secondary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm";
 const rating = yarn?.rating ?? null;
 ---
 
 {
   yarn && (
     <Layout title={yarn.name}>
-      <div class="bg-cosmic min-h-screen p-4 text-white sm:p-8">
+      <div class="min-h-screen p-4 sm:p-8">
         <div class="mx-auto max-w-2xl">
-          <a href="/dashboard" class="mb-4 inline-block text-sm text-purple-300 hover:underline">
+          <a href="/dashboard" class="text-primary mb-4 inline-block text-sm hover:underline">
             ← Wróć do biblioteki
           </a>
 
-          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white/10 backdrop-blur-xl">
-            <div class="aspect-[4/3] w-full bg-white/5">
+          <div class="border-border bg-card overflow-hidden rounded-2xl border">
+            <div class="bg-secondary aspect-[4/3] w-full">
               {yarn.photoUrl ? (
                 <img src={yarn.photoUrl} alt={yarn.name} class="h-full w-full object-cover" />
               ) : (
-                <YarnPhotoPlaceholder class="h-full w-full p-16 text-blue-100/30" />
+                <YarnPhotoPlaceholder class="text-muted-foreground h-full w-full p-16" />
               )}
             </div>
 
             <div class="space-y-6 p-6">
               <section>
-                <h1 class="bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-2xl font-bold text-transparent">
-                  {yarn.name}
-                </h1>
-                <p class="mt-1 text-blue-100/70">{yarn.manufacturer}</p>
+                <h1 class="text-2xl font-bold">{yarn.name}</h1>
+                <p class="text-muted-foreground mt-1">{yarn.manufacturer}</p>
               </section>
 
               <section class="flex flex-wrap gap-2">
@@ -69,7 +67,7 @@ const rating = yarn?.rating ?? null;
 
               {yarn.composition && yarn.composition.length > 0 && (
                 <section>
-                  <h2 class="mb-2 text-sm font-semibold text-blue-100/80">Skład</h2>
+                  <h2 class="text-muted-foreground mb-2 text-sm font-semibold">Skład</h2>
                   <div class="flex flex-wrap gap-2">
                     {yarn.composition.map((row) => (
                       <span class:list={chipClass}>
@@ -82,26 +80,28 @@ const rating = yarn?.rating ?? null;
 
               {rating && (
                 <section>
-                  <h2 class="mb-2 text-sm font-semibold text-blue-100/80">Ocena</h2>
+                  <h2 class="text-muted-foreground mb-2 text-sm font-semibold">Ocena</h2>
                   <div class="flex items-center gap-1">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star className={`size-5 ${i < rating ? "fill-yellow-300 text-yellow-300" : "text-white/20"}`} />
+                      <Star
+                        className={`size-5 ${i < rating ? "fill-warning-border text-warning-border" : "text-border"}`}
+                      />
                     ))}
                   </div>
                 </section>
               )}
 
               {yarn.gauge_note && (
-                <section class="rounded-xl border border-white/10 bg-white/5 p-4">
-                  <h2 class="mb-2 text-sm font-semibold text-blue-100/80">Próbka</h2>
-                  <p class="text-sm whitespace-pre-wrap text-blue-100/90">{yarn.gauge_note}</p>
+                <section class="border-border bg-secondary rounded-xl border p-4">
+                  <h2 class="text-muted-foreground mb-2 text-sm font-semibold">Próbka</h2>
+                  <p class="text-sm whitespace-pre-wrap">{yarn.gauge_note}</p>
                 </section>
               )}
 
               {yarn.note && (
                 <section>
-                  <h2 class="mb-2 text-sm font-semibold text-blue-100/80">Notatka</h2>
-                  <p class="text-sm whitespace-pre-wrap text-blue-100/90">{yarn.note}</p>
+                  <h2 class="text-muted-foreground mb-2 text-sm font-semibold">Notatka</h2>
+                  <p class="text-sm whitespace-pre-wrap">{yarn.note}</p>
                 </section>
               )}
             </div>

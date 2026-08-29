@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Banner from "@/components/Banner.astro";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { missingConfigs } from "@/lib/config-status";
 
 interface Props {
@@ -17,6 +18,13 @@ const { title = "10x Astro Starter" } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <title>{title}</title>
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const isDark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.classList.toggle("dark", isDark);
+      })();
+    </script>
   </head>
   <body>
     {
@@ -36,6 +44,9 @@ const { title = "10x Astro Starter" } = Astro.props;
       ))
     }
     <slot />
+    <div class="fixed right-4 bottom-4 z-50">
+      <ThemeToggle client:only="react" />
+    </div>
   </body>
 </html>
 
