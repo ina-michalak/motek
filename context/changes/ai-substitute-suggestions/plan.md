@@ -315,7 +315,7 @@ Nowa tabela, brak istniejących danych do migracji. `on delete cascade` na obu F
 
 - [x] 3.3 Żądanie bez sesji zwraca 401 — 5b3e6b9
 - [x] 3.4 Poprawne żądanie zapisuje wiersz i zwraca 200 — 5b3e6b9
-- [ ] 3.5 Żądanie z cudzym `substituteYarnId` jest odrzucane
+- [x] 3.5 Żądanie z cudzym `substituteYarnId` jest odrzucane — zweryfikowano ręcznie 2026-08-29 (400 "Both yarns must belong to the current user", brak zapisanego wiersza)
 
 ### Faza 4: Frontend — sekcja zamienników
 

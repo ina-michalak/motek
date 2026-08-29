@@ -48,7 +48,7 @@
 - **Lokalizacja**: N/A (Progress 3.5, `src/lib/services/substitutes.ts` `recordSubstituteDecision`)
 - **Szczegóły**: Krok "Żądanie z cudzym `substituteYarnId` jest odrzucane" nigdy nie został ręcznie zweryfikowany — świadomie odłożony przez użytkownika do wspólnego testu wielu kont. Kod ma już zabezpieczenie (`recordSubstituteDecision` weryfikuje przez `getYarnById`, że obie włóczki należą do wywołującego), więc to luka w weryfikacji, nie w implementacji.
 - **Poprawka**: Wykonaj krok 3.5 przy najbliższej sesji testów z drugim kontem; zaznacz w Progress po potwierdzeniu.
-- **Decyzja**: SKIPPED (odłożone do wspólnego testu wielu kont)
+- **Decyzja**: FIXED — zweryfikowano ręcznie 2026-08-29 z dwoma kontami lokalnymi (`wp.pl` / `gmail.com`): żądanie zwróciło `400 {"error":"Both yarns must belong to the current user"}`, brak zapisanego wiersza w `yarn_substitute_decisions`. Progress 3.5 odhaczone.
 
 ### F4 — Duplikat typu `SubstituteSuggestion` zamiast importu
 
