@@ -29,7 +29,12 @@ export const POST: APIRoute = async (context) => {
     return Response.json({ error: "Supabase is not configured" }, { status: 400 });
   }
 
-  const body: unknown = await context.request.json();
+  let body: unknown;
+  try {
+    body = await context.request.json();
+  } catch {
+    return Response.json({ error: "Nieprawidłowy JSON" }, { status: 400 });
+  }
   const parsed = substituteDecisionSchema.safeParse(body);
   if (!parsed.success) {
     const message = parsed.error.issues[0]?.message ?? "Nieprawidłowe dane żądania";
