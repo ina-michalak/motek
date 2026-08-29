@@ -321,15 +321,15 @@ Nowa tabela, brak istniejących danych do migracji. `on delete cascade` na obu F
 
 #### Automatyczne
 
-- [x] 4.1 Sprawdzanie typów przechodzi: `npx astro check`
-- [x] 4.2 Linting przechodzi: `npm run lint`
-- [x] 4.3 Testy jednostkowe nadal przechodzą: `npm run test`
+- [x] 4.1 Sprawdzanie typów przechodzi: `npx astro check` — 773bb11
+- [x] 4.2 Linting przechodzi: `npm run lint` — 773bb11
+- [x] 4.3 Testy jednostkowe nadal przechodzą: `npm run test` — 773bb11
 
 #### Ręczne
 
-- [x] 4.4 Sugestie pokazują się posortowane malejąco po podobieństwie
-- [x] 4.5 Akceptacja działa natychmiast i jest trwała po odświeżeniu
-- [x] 4.6 Odrzucenie działa natychmiast i jest trwałe po odświeżeniu
-- [x] 4.7 Symetria potwierdzona z obu stron pary
-- [x] 4.8 Spójny stan pusty przy braku wystarczająco podobnych włóczek
-- [x] 4.9 Brak regresji na istniejących sekcjach strony i dashboardzie
+- [x] 4.4 Sugestie pokazują się posortowane malejąco po podobieństwie — 773bb11
+- [x] 4.5 Akceptacja działa natychmiast i jest trwała po odświeżeniu — 773bb11
+- [x] 4.6 Odrzucenie działa natychmiast i jest trwałe po odświeżeniu — 773bb11
+- [x] 4.7 Symetria potwierdzona z obu stron pary — 773bb11
+- [x] 4.8 Spójny stan pusty przy braku wystarczająco podobnych włóczek — 773bb11
+- [x] 4.9 Brak regresji na istniejących sekcjach strony i dashboardzie — 773bb11
