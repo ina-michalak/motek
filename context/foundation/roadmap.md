@@ -3,7 +3,7 @@ project: "Motek"
 version: 1
 status: draft
 created: 2026-08-19
-updated: 2026-08-23
+updated: 2026-08-29
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -30,7 +30,7 @@ Rękodzielniczki i rękodzielnicy z zapasem włóczki (30+ motków) nie mają wy
 | ID   | ID zmiany                    | Wynik (użytkownik może…)                                              | Wymagania wstępne | Odniesienia do PRD          | Status   |
 | ---- | ----------------------------- | ---------------------------------------------------------------------- | ------------------ | ---------------------------- | -------- |
 | F-01 | yarn-data-foundation          | (fundament) schemat danych biblioteki włóczek z RLS wdrożony            | —                   | Guardrail, NFR (izolacja)     | done |
-| S-01 | add-and-browse-yarn-library   | dodać włóczkę i przeglądać swoją bibliotekę                            | F-01                | FR-002, FR-003, US-01         | in-progress |
+| S-01 | add-and-browse-yarn-library   | dodać włóczkę i przeglądać swoją bibliotekę                            | F-01                | FR-002, FR-003, US-01         | done |
 | S-02 | ai-substitute-suggestions     | zobaczyć sugestie AI zamienników i zaakceptować/odrzucić je            | S-01                | FR-007, FR-008, FR-009, US-01 | proposed |
 | S-03 | manage-saved-yarn-entry       | edytować zapisaną włóczkę (w tym oznaczyć jako wyczerpaną) lub usunąć  | S-01                | FR-005, FR-006                | proposed |
 | S-04 | filter-and-sort-yarn-library  | filtrować i sortować listę włóczek                                     | S-01                | FR-004                        | proposed |
@@ -77,7 +77,7 @@ Fundamenty poniżej zakładają, że te elementy są obecne i NIE tworzą ich po
 - **Niewiadome:**
   - Jak formularz dodawania włóczki powinien poprowadzić usera do rozdzielenia nazwy i producenta (np. "Drops Karisma")? — Właściciel: user/projektant UX. Blokuje: nie.
 - **Ryzyko:** Pierwszy fragment, który faktycznie zapisuje dane do nowego schematu (F-01) — tu wyjdą na jaw ewentualne braki w projekcie tabeli, zanim dotkną kolejnych fragmentów.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-02: Użytkownik widzi sugestie AI zamienników i akceptuje lub odrzuca je
 
@@ -144,3 +144,4 @@ Brak pytań przekrojowych (obejmujących wiele fragmentów) w tej chwili. Jedyne
 ## Zrobione
 
 - **F-01: (fundament) schemat danych biblioteki włóczek z RLS wdrożony** — Archived 2026-08-23 → `context/archive/2026-08-23-yarn-data-foundation/`. Lesson: —.
+- **S-01: dodać włóczkę i przeglądać swoją bibliotekę** — Archived 2026-08-29 → `context/archive/2026-08-23-add-and-browse-yarn-library/`. Lesson: —.
