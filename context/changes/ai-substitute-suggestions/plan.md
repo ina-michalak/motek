@@ -300,9 +300,9 @@ Nowa tabela, brak istniejących danych do migracji. `on delete cascade` na obu F
 
 #### Automatyczne
 
-- [ ] 2.1 Testy jednostkowe przechodzą: `npm run test`
-- [ ] 2.2 Sprawdzanie typów przechodzi: `npx astro check`
-- [ ] 2.3 Linting przechodzi: `npm run lint`
+- [x] 2.1 Testy jednostkowe przechodzą: `npm run test`
+- [x] 2.2 Sprawdzanie typów przechodzi: `npx astro check`
+- [x] 2.3 Linting przechodzi: `npm run lint`
 
 ### Faza 3: API route accept/reject
 
