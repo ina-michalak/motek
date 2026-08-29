@@ -308,28 +308,28 @@ Nowa tabela, brak istniejących danych do migracji. `on delete cascade` na obu F
 
 #### Automatyczne
 
-- [x] 3.1 Sprawdzanie typów przechodzi: `npx astro check`
-- [x] 3.2 Linting przechodzi: `npm run lint`
+- [x] 3.1 Sprawdzanie typów przechodzi: `npx astro check` — 5b3e6b9
+- [x] 3.2 Linting przechodzi: `npm run lint` — 5b3e6b9
 
 #### Ręczne
 
-- [x] 3.3 Żądanie bez sesji zwraca 401
-- [x] 3.4 Poprawne żądanie zapisuje wiersz i zwraca 200
+- [x] 3.3 Żądanie bez sesji zwraca 401 — 5b3e6b9
+- [x] 3.4 Poprawne żądanie zapisuje wiersz i zwraca 200 — 5b3e6b9
 - [ ] 3.5 Żądanie z cudzym `substituteYarnId` jest odrzucane
 
 ### Faza 4: Frontend — sekcja zamienników
 
 #### Automatyczne
 
-- [ ] 4.1 Sprawdzanie typów przechodzi: `npx astro check`
-- [ ] 4.2 Linting przechodzi: `npm run lint`
-- [ ] 4.3 Testy jednostkowe nadal przechodzą: `npm run test`
+- [x] 4.1 Sprawdzanie typów przechodzi: `npx astro check`
+- [x] 4.2 Linting przechodzi: `npm run lint`
+- [x] 4.3 Testy jednostkowe nadal przechodzą: `npm run test`
 
 #### Ręczne
 
-- [ ] 4.4 Sugestie pokazują się posortowane malejąco po podobieństwie
-- [ ] 4.5 Akceptacja działa natychmiast i jest trwała po odświeżeniu
-- [ ] 4.6 Odrzucenie działa natychmiast i jest trwałe po odświeżeniu
-- [ ] 4.7 Symetria potwierdzona z obu stron pary
-- [ ] 4.8 Spójny stan pusty przy braku wystarczająco podobnych włóczek
-- [ ] 4.9 Brak regresji na istniejących sekcjach strony i dashboardzie
+- [x] 4.4 Sugestie pokazują się posortowane malejąco po podobieństwie
+- [x] 4.5 Akceptacja działa natychmiast i jest trwała po odświeżeniu
+- [x] 4.6 Odrzucenie działa natychmiast i jest trwałe po odświeżeniu
+- [x] 4.7 Symetria potwierdzona z obu stron pary
+- [x] 4.8 Spójny stan pusty przy braku wystarczająco podobnych włóczek
+- [x] 4.9 Brak regresji na istniejących sekcjach strony i dashboardzie
