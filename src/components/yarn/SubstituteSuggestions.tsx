@@ -3,12 +3,8 @@ import { Check, Spool, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ServerError } from "@/components/auth/ServerError";
 import type { YarnWithPhotoUrl } from "@/lib/services/yarns";
+import type { SubstituteSuggestion } from "@/lib/services/substitutes";
 import type { SubstituteDecisionStatus } from "@/types";
-
-interface SubstituteSuggestion {
-  yarn: YarnWithPhotoUrl;
-  score: number;
-}
 
 interface Props {
   yarnId: string;
@@ -20,7 +16,7 @@ function YarnThumbnail({ yarn }: { yarn: YarnWithPhotoUrl }) {
   return (
     <div className="bg-secondary size-14 shrink-0 overflow-hidden rounded-lg">
       {yarn.photoUrl ? (
-        <img src={yarn.photoUrl} alt={yarn.name} className="h-full w-full object-cover" />
+        <img src={yarn.photoUrl} alt={yarn.name} loading="lazy" className="h-full w-full object-cover" />
       ) : (
         <Spool className="text-muted-foreground h-full w-full p-3" strokeWidth={1.25} aria-hidden="true" />
       )}
@@ -58,13 +54,17 @@ export default function SubstituteSuggestions({ yarnId, initialSuggestions, init
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ substituteYarnId, status }),
       });
-      if (!response.ok) throw new Error("Request failed");
-    } catch {
+      if (!response.ok) {
+        const body = (await response.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(body?.error);
+      }
+    } catch (err) {
       setSuggestions((prev) => [...prev, suggestion].sort((a, b) => b.score - a.score));
       if (status === "accepted") {
         setAccepted((prev) => prev.filter((yarn) => yarn.id !== substituteYarnId));
       }
-      setError("Nie udało się zapisać decyzji. Spróbuj ponownie.");
+      const message = err instanceof Error && err.message ? err.message : "Nie udało się zapisać decyzji.";
+      setError(message);
     } finally {
       setPendingIds((prev) => {
         const next = new Set(prev);
@@ -121,7 +121,7 @@ export default function SubstituteSuggestions({ yarnId, initialSuggestions, init
                     type="button"
                     variant="outline"
                     size="icon"
-                    aria-label="Akceptuj"
+                    aria-label={`Akceptuj ${suggestion.yarn.name} jako zamiennik`}
                     disabled={pendingIds.has(suggestion.yarn.id)}
                     onClick={() => handleDecision(suggestion, "accepted")}
                   >
@@ -131,7 +131,7 @@ export default function SubstituteSuggestions({ yarnId, initialSuggestions, init
                     type="button"
                     variant="ghost"
                     size="icon"
-                    aria-label="Odrzuć"
+                    aria-label={`Odrzuć ${suggestion.yarn.name} jako zamiennik`}
                     disabled={pendingIds.has(suggestion.yarn.id)}
                     onClick={() => handleDecision(suggestion, "rejected")}
                   >
