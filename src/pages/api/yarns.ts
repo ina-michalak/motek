@@ -65,6 +65,8 @@ export const POST: APIRoute = async (context) => {
       await attachYarnPhoto(supabase, context.locals.user.id, yarn.id, photo);
     } catch (error) {
       console.warn("Failed to attach yarn photo:", error);
+      const message = "Włóczka została zapisana, ale nie udało się zapisać zdjęcia.";
+      return context.redirect(`/dashboard?warning=${encodeURIComponent(message)}`);
     }
   }
 

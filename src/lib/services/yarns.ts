@@ -102,6 +102,7 @@ export async function attachYarnPhoto(
     .from("yarns")
     .select("photo_url")
     .eq("id", yarnId)
+    .eq("user_id", userId)
     .maybeSingle()) as { data: { photo_url: string | null } | null; error: PostgrestError | null };
   if (fetchError) throw fetchError;
 
@@ -116,6 +117,7 @@ export async function attachYarnPhoto(
     .from("yarns")
     .update({ photo_url: path })
     .eq("id", yarnId)
+    .eq("user_id", userId)
     .select("id")) as { data: { id: string }[] | null; error: PostgrestError | null };
 
   if (updateError || !updated || updated.length === 0) {
