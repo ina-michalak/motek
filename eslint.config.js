@@ -65,6 +65,10 @@ const astroConfig = tseslint.config({
     "astro/no-set-html-directive": "error",
     "astro/no-unused-css-selector": "warn",
     "astro/prefer-class-list-directive": "warn",
+    // astro-eslint-parser exposes frontmatter as a bare Program, so a top-level
+    // `return` (Astro's documented way to redirect, e.g. `return Astro.redirect(...)`)
+    // has no enclosing function node — this rule crashes trying to look one up.
+    "@typescript-eslint/no-misused-promises": "off",
   },
 });
 

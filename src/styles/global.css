@@ -1,28 +1,46 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "@fontsource-variable/plus-jakarta-sans";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+
+  /* Paleta Motka (Figma "Style guide", node 4:712) — motyw jasny */
+  --background: #fbf8f4; /* offwhite/500 */
+  --foreground: #272520; /* graphite/700 — text/highEmphasis */
+  --card: #fdfbf9; /* offwhite/200 — surface/baseLight */
+  --card-foreground: #272520;
+  --popover: #fdfbf9;
+  --popover-foreground: #272520;
+  --primary: #7c91de; /* blue/500 — primary/base */
+  --primary-foreground: #272520; /* brak tokenu w Figmie — ciemny tekst dla pewnego kontrastu na pastelowym błękicie */
+  --secondary: #efeae4; /* offwhite/700 — surface/baseDark */
+  --secondary-foreground: #272520;
+  --muted: #efeae4;
+  --muted-foreground: #373945; /* graphite/500 — text/lowEmphasis */
+  --accent: #bdcdf5; /* blue/200 — primary/surface/light */
+  --accent-foreground: #526ed2; /* blue/600 — primary/text/highEmphasis */
+  --destructive: #ac3038; /* red/700 — alert/error text */
+  --border: #d9d5d2; /* grey/200 */
+  --input: #d9d5d2;
+  --ring: #7c91de; /* blue/500 */
+
+  /* Alerty — theme-invariant w Figmie, te same wartości w obu motywach */
+  --info: #d9e4fa; /* blue/100 */
+  --info-foreground: #52639e; /* blue/700 */
+  --info-border: #bdcdf5; /* blue/200 */
+  --warning: #f7e9c8; /* yellow/200 */
+  --warning-foreground: #915f04; /* yellow/700 */
+  --warning-border: #fcd07e; /* yellow/500 */
+  --success: #e5f4bf; /* green/200 */
+  --success-foreground: #587309; /* green/700 */
+  --success-border: #cce77f; /* green/500 */
+  --error: #ffdcdc; /* red/200 */
+  --error-foreground: #ac3038; /* red/700 */
+  --error-border: #f6adad; /* red/500 */
+
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -39,24 +57,39 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  /* Paleta Motka — motyw ciemny */
+  --background: #272520; /* graphite/700 */
+  --foreground: #fdfbf9; /* offwhite/200 — text/highEmphasis */
+  --card: #48495a; /* graphite/200 — surface/baseLight (jaśniejsza = wyniesiona powierzchnia) */
+  --card-foreground: #fdfbf9;
+  --popover: #48495a;
+  --popover-foreground: #fdfbf9;
+  --primary: #7c91de; /* blue/500 — theme-invariant */
+  --primary-foreground: #272520;
+  --secondary: #373945; /* graphite/500 — surface/baseDark */
+  --secondary-foreground: #fdfbf9;
+  --muted: #373945;
+  --muted-foreground: #fbf8f4; /* offwhite/500 — text/lowEmphasis */
+  --accent: #7c91de; /* blue/500 — primary/surface/dark */
+  --accent-foreground: #272520;
+  --destructive: #ac3038;
+  --border: #807f88; /* grey/700 */
+  --input: #807f88;
+  --ring: #7c91de;
+
+  --info: #d9e4fa;
+  --info-foreground: #52639e;
+  --info-border: #bdcdf5;
+  --warning: #f7e9c8;
+  --warning-foreground: #915f04;
+  --warning-border: #fcd07e;
+  --success: #e5f4bf;
+  --success-foreground: #587309;
+  --success-border: #cce77f;
+  --error: #ffdcdc;
+  --error-foreground: #ac3038;
+  --error-border: #f6adad;
+
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -70,6 +103,56 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+@theme {
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* Skala dobrana pod Plus Jakarta Sans: nieco luźniejsze linie na body,
+     ściągnięty tracking od 2xl w górę (font ma szeroki domyślny odstęp na dużych rozmiarach). */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.125rem;
+  --text-xs--letter-spacing: 0.01em;
+
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.3rem;
+  --text-sm--letter-spacing: 0em;
+
+  --text-base: 1rem;
+  --text-base--line-height: 1.55rem;
+  --text-base--letter-spacing: 0em;
+
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.65rem;
+  --text-lg--letter-spacing: -0.005em;
+
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.75rem;
+  --text-xl--letter-spacing: -0.01em;
+
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.9rem;
+  --text-2xl--letter-spacing: -0.015em;
+
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 2.2rem;
+  --text-3xl--letter-spacing: -0.02em;
+
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 2.6rem;
+  --text-4xl--letter-spacing: -0.02em;
+
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1.1;
+  --text-5xl--letter-spacing: -0.025em;
+
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 1.05;
+  --text-6xl--letter-spacing: -0.03em;
+
+  --text-7xl: 4.5rem;
+  --text-7xl--line-height: 1.05;
+  --text-7xl--letter-spacing: -0.03em;
 }
 
 @theme inline {
@@ -92,6 +175,18 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-border: var(--info-border);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-border: var(--warning-border);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-border: var(--success-border);
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-error-border: var(--error-border);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -110,15 +205,12 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@utility bg-cosmic {
-  background-image: linear-gradient(to bottom, #0a0e1a, #0f1529, #0a0e1a);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
   }
 }

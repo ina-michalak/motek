@@ -1,0 +1,113 @@
+---
+import { Star } from "lucide-react";
+import { z } from "zod";
+import Layout from "@/layouts/Layout.astro";
+import YarnPhotoPlaceholder from "@/components/yarn/YarnPhotoPlaceholder.astro";
+import { createClient } from "@/lib/supabase";
+import { getYarnById } from "@/lib/services/yarns";
+
+export const prerender = false;
+
+const { user } = Astro.locals;
+const { id } = Astro.params;
+const isValidId = id != null && z.uuid().safeParse(id).success;
+
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+const yarn = supabase && user && isValidId ? await getYarnById(supabase, user.id, id) : null;
+
+if (!yarn) {
+  Astro.response.status = 302;
+  Astro.response.headers.set("Location", "/dashboard");
+}
+
+const quantityLabel = yarn
+  ? [
+      yarn.quantity_skeins != null ? `${yarn.quantity_skeins} motków` : null,
+      yarn.quantity_grams != null ? `${yarn.quantity_grams} g` : null,
+    ]
+      .filter(Boolean)
+      .join(" / ")
+  : "";
+
+const chipClass = "bg-secondary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm";
+const rating = yarn?.rating ?? null;
+---
+
+{
+  yarn && (
+    <Layout title={yarn.name}>
+      <div class="min-h-screen p-4 sm:p-8">
+        <div class="mx-auto max-w-2xl">
+          <a href="/dashboard" class="text-primary mb-4 inline-block text-sm hover:underline">
+            ← Wróć do biblioteki
+          </a>
+
+          <div class="border-border bg-card overflow-hidden rounded-2xl border">
+            <div class="bg-secondary aspect-[4/3] w-full">
+              {yarn.photoUrl ? (
+                <img src={yarn.photoUrl} alt={yarn.name} class="h-full w-full object-cover" />
+              ) : (
+                <YarnPhotoPlaceholder class="text-muted-foreground h-full w-full p-16" />
+              )}
+            </div>
+
+            <div class="space-y-6 p-6">
+              <section>
+                <h1 class="text-2xl font-bold">{yarn.name}</h1>
+                <p class="text-muted-foreground mt-1">{yarn.manufacturer}</p>
+              </section>
+
+              <section class="flex flex-wrap gap-2">
+                {quantityLabel && <span class:list={chipClass}>{quantityLabel}</span>}
+                {yarn.color && <span class:list={chipClass}>Kolor: {yarn.color}</span>}
+                {yarn.dye_lot && <span class:list={chipClass}>Farbowanie: {yarn.dye_lot}</span>}
+                {yarn.needle_size_mm != null && <span class:list={chipClass}>Druty {yarn.needle_size_mm} mm</span>}
+                {yarn.hook_size_mm != null && <span class:list={chipClass}>Szydełko {yarn.hook_size_mm} mm</span>}
+              </section>
+
+              {yarn.composition && yarn.composition.length > 0 && (
+                <section>
+                  <h2 class="text-muted-foreground mb-2 text-sm font-semibold">Skład</h2>
+                  <div class="flex flex-wrap gap-2">
+                    {yarn.composition.map((row) => (
+                      <span class:list={chipClass}>
+                        {row.fiber} {row.percent}%
+                      </span>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {rating && (
+                <section>
+                  <h2 class="text-muted-foreground mb-2 text-sm font-semibold">Ocena</h2>
+                  <div class="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        className={`size-5 ${i < rating ? "fill-warning-border text-warning-border" : "text-border"}`}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {yarn.gauge_note && (
+                <section class="border-border bg-secondary rounded-xl border p-4">
+                  <h2 class="text-muted-foreground mb-2 text-sm font-semibold">Próbka</h2>
+                  <p class="text-sm whitespace-pre-wrap">{yarn.gauge_note}</p>
+                </section>
+              )}
+
+              {yarn.note && (
+                <section>
+                  <h2 class="text-muted-foreground mb-2 text-sm font-semibold">Notatka</h2>
+                  <p class="text-sm whitespace-pre-wrap">{yarn.note}</p>
+                </section>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  )
+}

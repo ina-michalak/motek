@@ -1,0 +1,11 @@
+---
+import { Spool } from "lucide-react";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<Spool className={className} strokeWidth={1.25} aria-hidden="true" />

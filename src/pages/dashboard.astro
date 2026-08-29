@@ -1,27 +1,73 @@
 ---
+import { TriangleAlert } from "lucide-react";
 import Layout from "@/layouts/Layout.astro";
+import YarnCard from "@/components/yarn/YarnCard.astro";
+import YarnPhotoPlaceholder from "@/components/yarn/YarnPhotoPlaceholder.astro";
+import { createClient } from "@/lib/supabase";
+import { listYarns } from "@/lib/services/yarns";
+
+export const prerender = false;
 
 const { user } = Astro.locals;
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+const yarns = supabase && user ? await listYarns(supabase, user.id) : [];
+const warning = Astro.url.searchParams.get("warning");
 ---
 
-<Layout title="Dashboard">
-  <div class="bg-cosmic flex min-h-screen items-center justify-center p-4">
-    <div class="rounded-2xl border border-white/10 bg-white/10 p-8 text-center text-white backdrop-blur-xl">
-      <h1 class="mb-4 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
-        Dashboard
-      </h1>
-      <p class="text-blue-100/80">
-        Welcome, <span class="font-semibold text-white">{user?.email}</span>
-      </p>
-      <p class="mt-2 text-sm text-blue-100/50">This page is only for authenticated users.</p>
-      <form method="POST" action="/api/auth/signout" class="mt-6">
-        <button
-          type="submit"
-          class="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
-        >
-          Sign out
-        </button>
-      </form>
+<Layout title="Twoje włóczki">
+  <div class="min-h-screen p-4 sm:p-8">
+    <div class="mx-auto max-w-5xl">
+      {
+        warning && (
+          <p class="border-warning-border bg-warning text-warning-foreground mb-4 flex items-center gap-2 rounded-lg border px-3 py-2 text-sm">
+            <TriangleAlert className="size-4 shrink-0" />
+            {warning}
+          </p>
+        )
+      }
+
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <h1 class="text-2xl font-bold sm:text-3xl">
+          Twoje włóczki <span class="text-muted-foreground">({yarns.length})</span>
+        </h1>
+        <div class="flex items-center gap-3">
+          <a
+            href="/yarns/new"
+            class="border-border bg-card hover:bg-secondary rounded-lg border px-4 py-2 text-sm transition-colors"
+          >
+            + Dodaj włóczkę
+          </a>
+          <form method="POST" action="/api/auth/signout">
+            <button
+              type="submit"
+              class="border-border bg-card hover:bg-secondary rounded-lg border px-4 py-2 text-sm transition-colors"
+            >
+              Wyloguj
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {
+        yarns.length === 0 ? (
+          <div class="border-border bg-card flex flex-col items-center rounded-2xl border p-12 text-center">
+            <YarnPhotoPlaceholder class="text-muted-foreground mb-4 size-16" />
+            <p class="text-muted-foreground">Nie masz jeszcze żadnej włóczki — dodaj pierwszą.</p>
+            <a
+              href="/yarns/new"
+              class="border-border bg-background hover:bg-secondary mt-4 rounded-lg border px-4 py-2 text-sm transition-colors"
+            >
+              + Dodaj włóczkę
+            </a>
+          </div>
+        ) : (
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {yarns.map((yarn) => (
+              <YarnCard yarn={yarn} />
+            ))}
+          </div>
+        )
+      }
     </div>
   </div>
 </Layout>
