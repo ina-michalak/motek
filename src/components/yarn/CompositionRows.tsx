@@ -1,6 +1,7 @@
 import { Plus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { COMMON_FIBERS } from "@/lib/validation/yarn";
+import { blockInvalidNumberKey, sanitizeNonNegativeNumberInput } from "@/lib/numeric-input";
 
 export interface CompositionRow {
   id: string;
@@ -47,8 +48,9 @@ export function CompositionRows({ value, onChange }: CompositionRowsProps) {
             step="any"
             value={row.percent}
             onChange={(e) => {
-              updateRow(row.id, { percent: e.target.value });
+              updateRow(row.id, { percent: sanitizeNonNegativeNumberInput(e.target.value) });
             }}
+            onKeyDown={blockInvalidNumberKey}
             placeholder="%"
             aria-label="Procent składu"
             className="w-20"

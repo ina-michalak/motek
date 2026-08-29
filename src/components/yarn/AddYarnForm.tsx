@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "@/components/auth/SubmitButton";
 import { ServerError } from "@/components/auth/ServerError";
 import { CompositionRows, type CompositionRow } from "@/components/yarn/CompositionRows";
+import { PhotoDropzone } from "@/components/yarn/PhotoDropzone";
 import { StarRatingInput } from "@/components/yarn/StarRatingInput";
 import {
   createYarnSchema,
@@ -13,9 +14,15 @@ import {
   KNOWN_MANUFACTURERS,
   COMMON_NEEDLE_HOOK_SIZES_MM,
 } from "@/lib/validation/yarn";
+import { blockInvalidNumberKey, sanitizeNonNegativeNumberInput } from "@/lib/numeric-input";
 
 function serializeComposition(composition: CompositionRow[]): string {
-  return JSON.stringify(composition.map(({ fiber, percent }) => ({ fiber, percent })));
+  const filled = composition.filter((row) => row.fiber.trim() !== "" || row.percent.trim() !== "");
+  return JSON.stringify(filled.map(({ fiber, percent }) => ({ fiber, percent })));
+}
+
+function createEmptyCompositionRow(): CompositionRow {
+  return { id: crypto.randomUUID(), fiber: "", percent: "" };
 }
 
 const labelClass = "mb-1 block";
@@ -61,8 +68,9 @@ function FieldError({ message }: { message: string }) {
 
 export default function AddYarnForm({ serverError }: Props) {
   const [values, setValues] = useState<TextValues>(initialValues);
-  const [composition, setComposition] = useState<CompositionRow[]>([]);
+  const [composition, setComposition] = useState<CompositionRow[]>(() => [createEmptyCompositionRow()]);
   const [rating, setRating] = useState<number | null>(null);
+  const [photoKey, setPhotoKey] = useState(0);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
@@ -91,9 +99,7 @@ export default function AddYarnForm({ serverError }: Props) {
     setErrors((prev) => ({ ...prev, composition: undefined }));
   }
 
-  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0] ?? null;
-
+  function handlePhotoFile(file: File | null) {
     if (!file) {
       setPhotoPreview(null);
       setPhotoError(null);
@@ -102,8 +108,8 @@ export default function AddYarnForm({ serverError }: Props) {
     const validationError = validateYarnPhoto(file);
     if (validationError) {
       setPhotoError(validationError);
-      e.target.value = "";
       setPhotoPreview(null);
+      setPhotoKey((key) => key + 1);
       return;
     }
     setPhotoError(null);
@@ -135,7 +141,11 @@ export default function AddYarnForm({ serverError }: Props) {
 
   function scrollToField(key?: string) {
     if (!key) return;
-    const id = key === "composition" ? "composition-fields" : key;
+    const wrappedFieldIds: Record<string, string> = {
+      composition: "composition-fields",
+      photo: "photo-fields",
+    };
+    const id = wrappedFieldIds[key] ?? key;
     const el = document.getElementById(id);
     if (!el) return;
     el.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -173,23 +183,6 @@ export default function AddYarnForm({ serverError }: Props) {
       <ServerError message={hasErrors ? "Formularz zawiera błędy — popraw zaznaczone pola." : null} />
 
       <div>
-        <Label htmlFor="name" className={labelClass}>
-          Nazwa
-        </Label>
-        <Input
-          id="name"
-          name="name"
-          value={values.name}
-          onChange={(e) => {
-            updateField("name", e.target.value);
-          }}
-          placeholder="np. Merino Extrafine"
-          aria-invalid={!!errors.name}
-        />
-        {errors.name && <FieldError message={errors.name} />}
-      </div>
-
-      <div>
         <Label htmlFor="manufacturer" className={labelClass}>
           Producent
         </Label>
@@ -213,6 +206,23 @@ export default function AddYarnForm({ serverError }: Props) {
       </div>
 
       <div>
+        <Label htmlFor="name" className={labelClass}>
+          Nazwa
+        </Label>
+        <Input
+          id="name"
+          name="name"
+          value={values.name}
+          onChange={(e) => {
+            updateField("name", e.target.value);
+          }}
+          placeholder="np. Merino Extrafine"
+          aria-invalid={!!errors.name}
+        />
+        {errors.name && <FieldError message={errors.name} />}
+      </div>
+
+      <div>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label htmlFor="quantity_skeins" className={labelClass}>
@@ -226,8 +236,9 @@ export default function AddYarnForm({ serverError }: Props) {
               step="any"
               value={values.quantity_skeins}
               onChange={(e) => {
-                updateField("quantity_skeins", e.target.value);
+                updateField("quantity_skeins", sanitizeNonNegativeNumberInput(e.target.value));
               }}
+              onKeyDown={blockInvalidNumberKey}
               aria-invalid={!!quantityError}
             />
           </div>
@@ -243,8 +254,9 @@ export default function AddYarnForm({ serverError }: Props) {
               step="any"
               value={values.quantity_grams}
               onChange={(e) => {
-                updateField("quantity_grams", e.target.value);
+                updateField("quantity_grams", sanitizeNonNegativeNumberInput(e.target.value));
               }}
+              onKeyDown={blockInvalidNumberKey}
               aria-invalid={!!quantityError}
             />
           </div>
@@ -297,18 +309,21 @@ export default function AddYarnForm({ serverError }: Props) {
             name="needle_size_mm"
             type="number"
             list="needle-sizes"
-            min={0}
+            min={0.25}
             step="any"
             value={values.needle_size_mm}
             onChange={(e) => {
-              updateField("needle_size_mm", e.target.value);
+              updateField("needle_size_mm", sanitizeNonNegativeNumberInput(e.target.value));
             }}
+            onKeyDown={blockInvalidNumberKey}
+            aria-invalid={!!errors.needle_size_mm}
           />
           <datalist id="needle-sizes">
             {COMMON_NEEDLE_HOOK_SIZES_MM.map((size) => (
               <option key={size} value={size} />
             ))}
           </datalist>
+          {errors.needle_size_mm && <FieldError message={errors.needle_size_mm} />}
         </div>
         <div>
           <Label htmlFor="hook_size_mm" className={labelClass}>
@@ -319,18 +334,21 @@ export default function AddYarnForm({ serverError }: Props) {
             name="hook_size_mm"
             type="number"
             list="hook-sizes"
-            min={0}
+            min={0.25}
             step="any"
             value={values.hook_size_mm}
             onChange={(e) => {
-              updateField("hook_size_mm", e.target.value);
+              updateField("hook_size_mm", sanitizeNonNegativeNumberInput(e.target.value));
             }}
+            onKeyDown={blockInvalidNumberKey}
+            aria-invalid={!!errors.hook_size_mm}
           />
           <datalist id="hook-sizes">
             {COMMON_NEEDLE_HOOK_SIZES_MM.map((size) => (
               <option key={size} value={size} />
             ))}
           </datalist>
+          {errors.hook_size_mm && <FieldError message={errors.hook_size_mm} />}
         </div>
       </div>
 
@@ -367,22 +385,19 @@ export default function AddYarnForm({ serverError }: Props) {
         />
       </div>
 
-      <div>
+      <div id="photo-fields" tabIndex={-1}>
         <Label htmlFor="photo" className={labelClass}>
           Zdjęcie
         </Label>
-        <input
+        <PhotoDropzone
+          key={photoKey}
           id="photo"
           name="photo"
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          onChange={handlePhotoChange}
-          className="text-muted-foreground file:bg-secondary file:text-foreground hover:file:bg-accent block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:px-3 file:py-2 file:text-sm"
+          preview={photoPreview}
+          onFileSelected={handlePhotoFile}
+          invalid={!!photoError}
         />
         {photoError && <FieldError message={photoError} />}
-        {photoPreview && (
-          <img src={photoPreview} alt="Podgląd zdjęcia włóczki" className="mt-2 h-32 w-32 rounded-lg object-cover" />
-        )}
       </div>
 
       <ServerError message={serverError} />
