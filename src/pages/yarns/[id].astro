@@ -1,5 +1,5 @@
 ---
-import { Star } from "lucide-react";
+import { Star, TriangleAlert, CircleAlert } from "lucide-react";
 import { z } from "zod";
 import Layout from "@/layouts/Layout.astro";
 import YarnPhotoPlaceholder from "@/components/yarn/YarnPhotoPlaceholder.astro";
@@ -7,6 +7,8 @@ import { createClient } from "@/lib/supabase";
 import { getYarnById } from "@/lib/services/yarns";
 import { listSubstituteSuggestions, getAcceptedSubstitutes } from "@/lib/services/substitutes";
 import SubstituteSuggestions from "@/components/yarn/SubstituteSuggestions";
+import EditYarnDialog from "@/components/yarn/EditYarnDialog";
+import { isYarnExhausted } from "@/lib/utils";
 
 export const prerender = false;
 
@@ -16,6 +18,10 @@ const isValidId = id != null && z.uuid().safeParse(id).success;
 
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 const yarn = supabase && user && isValidId ? await getYarnById(supabase, user.id, id) : null;
+
+const error = Astro.url.searchParams.get("error");
+const warning = Astro.url.searchParams.get("warning");
+const editOpen = Astro.url.searchParams.get("edit") === "1";
 
 const suggestions = supabase && user && yarn ? await listSubstituteSuggestions(supabase, user.id, yarn.id) : [];
 const acceptedSubstitutes = supabase && user && yarn ? await getAcceptedSubstitutes(supabase, user.id, yarn.id) : [];
@@ -35,7 +41,10 @@ const quantityLabel = yarn
   : "";
 
 const chipClass = "bg-secondary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm";
+const exhaustedChipClass =
+  "border-warning-border bg-warning text-warning-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm";
 const rating = yarn?.rating ?? null;
+const exhausted = yarn ? isYarnExhausted(yarn) : false;
 ---
 
 {
@@ -43,9 +52,27 @@ const rating = yarn?.rating ?? null;
     <Layout title={yarn.name}>
       <div class="min-h-screen p-4 sm:p-8">
         <div class="mx-auto max-w-2xl">
-          <a href="/dashboard" class="text-primary mb-4 inline-block text-sm hover:underline">
-            ← Wróć do biblioteki
-          </a>
+          {error && (
+            <p class="border-error-border bg-error text-error-foreground mb-4 flex items-center gap-2 rounded-lg border px-3 py-2 text-sm">
+              <CircleAlert className="size-4 shrink-0" />
+              {error}
+            </p>
+          )}
+          {warning && (
+            <p class="border-warning-border bg-warning text-warning-foreground mb-4 flex items-center gap-2 rounded-lg border px-3 py-2 text-sm">
+              <TriangleAlert className="size-4 shrink-0" />
+              {warning}
+            </p>
+          )}
+
+          <div class="mb-4 flex items-center justify-between gap-4">
+            <a href="/dashboard" class="text-primary inline-block text-sm hover:underline">
+              ← Wróć do biblioteki
+            </a>
+            <div class="flex items-center gap-2">
+              <EditYarnDialog yarn={yarn} serverError={error} defaultOpen={editOpen} client:load />
+            </div>
+          </div>
 
           <div class="border-border bg-card overflow-hidden rounded-2xl border">
             <div class="bg-secondary aspect-[4/3] w-full">
@@ -64,6 +91,7 @@ const rating = yarn?.rating ?? null;
 
               <section class="flex flex-wrap gap-2">
                 {quantityLabel && <span class:list={chipClass}>{quantityLabel}</span>}
+                {exhausted && <span class:list={exhaustedChipClass}>Wyczerpana</span>}
                 {yarn.color && <span class:list={chipClass}>Kolor: {yarn.color}</span>}
                 {yarn.dye_lot && <span class:list={chipClass}>Farbowanie: {yarn.dye_lot}</span>}
                 {yarn.needle_size_mm != null && <span class:list={chipClass}>Druty {yarn.needle_size_mm} mm</span>}

@@ -1,6 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import AddYarnForm from "@/components/yarn/AddYarnForm";
+import YarnForm from "@/components/yarn/YarnForm";
 
 export const prerender = false;
 
@@ -11,7 +11,7 @@ const error = Astro.url.searchParams.get("error");
   <div class="flex min-h-screen items-center justify-center p-4">
     <div class="border-border bg-card w-full max-w-lg rounded-2xl border p-8">
       <h1 class="mb-6 text-center text-2xl font-bold">Dodaj włóczkę</h1>
-      <AddYarnForm serverError={error} client:load />
+      <YarnForm mode="create" action="/api/yarns" submitLabel="Dodaj włóczkę" serverError={error} client:load />
       <p class="text-muted-foreground mt-4 text-center text-sm">
         <a href="/dashboard" class="text-primary hover:underline">Wróć do biblioteki</a>
       </p>
