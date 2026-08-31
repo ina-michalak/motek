@@ -1,10 +1,10 @@
 ---
 change_id: manage-saved-yarn-entry
 title: Manage saved yarn entry
-status: impl_reviewed
+status: archived
 created: 2026-08-29
 updated: 2026-08-31
-archived_at: null
+archived_at: 2026-08-31T19:29:24Z
 ---
 
 ## Notes
