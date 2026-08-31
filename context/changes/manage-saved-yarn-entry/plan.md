@@ -325,17 +325,17 @@ Brak — żadna zmiana schematu nie jest wymagana.
 
 #### Automatyczne
 
-- [x] 2.1 npm run lint przechodzi
-- [x] 2.2 npm run build przechodzi
+- [x] 2.1 npm run lint przechodzi — 1d1cb55
+- [x] 2.2 npm run build przechodzi — 1d1cb55
 
 #### Ręczne
 
-- [x] 2.3 Modal edycji pokazuje wypełnione aktualne dane włóczki
-- [x] 2.4 Zmiana pola + zapis odświeża stronę z nowymi danymi
-- [x] 2.5 Usunięcie zdjęcia w modalu czyści zdjęcie i plik w Storage
-- [x] 2.6 Wgranie nowego zdjęcia zastępuje stare (stary plik usunięty)
-- [x] 2.7 Obie ilości = 0 pokazują badge "Wyczerpana" na szczegółach i karcie
-- [x] 2.8 Formularz dodawania działa bez regresji po zmianie nazwy komponentu
+- [x] 2.3 Modal edycji pokazuje wypełnione aktualne dane włóczki — 1d1cb55
+- [x] 2.4 Zmiana pola + zapis odświeża stronę z nowymi danymi — 1d1cb55
+- [x] 2.5 Usunięcie zdjęcia w modalu czyści zdjęcie i plik w Storage — 1d1cb55
+- [x] 2.6 Wgranie nowego zdjęcia zastępuje stare (stary plik usunięty) — 1d1cb55
+- [x] 2.7 Obie ilości = 0 pokazują badge "Wyczerpana" na szczegółach i karcie — 1d1cb55
+- [x] 2.8 Formularz dodawania działa bez regresji po zmianie nazwy komponentu — 1d1cb55
 
 ### Faza 3: Usuwanie (UI)
 

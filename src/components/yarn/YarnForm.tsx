@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CircleAlert, Plus } from "lucide-react";
+import { CircleAlert, Check, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -439,7 +439,10 @@ export default function YarnForm({
 
       <ServerError message={serverError} />
 
-      <SubmitButton pendingText="Zapisywanie..." icon={<Plus className="size-4" />}>
+      <SubmitButton
+        pendingText="Zapisywanie..."
+        icon={mode === "edit" ? <Check className="size-4" /> : <Plus className="size-4" />}
+      >
         {submitLabel}
       </SubmitButton>
     </form>
