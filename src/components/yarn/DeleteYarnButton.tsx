@@ -43,7 +43,11 @@ export default function DeleteYarnButton({ yarnId, yarnName }: Props) {
   }
 
   return (
-    <AlertDialog>
+    <AlertDialog
+      onOpenChange={(open) => {
+        if (!open) setError(null);
+      }}
+    >
       <AlertDialogTrigger asChild>
         <Button type="button" variant="destructive">
           <Trash2 className="size-4" />

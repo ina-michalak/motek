@@ -213,6 +213,9 @@ export async function attachYarnPhoto(
 
   const previousPath = existing?.photo_url;
   if (previousPath && previousPath !== path) {
-    await supabase.storage.from(YARN_PHOTOS_BUCKET).remove([previousPath]);
+    const { error: removeError } = await supabase.storage.from(YARN_PHOTOS_BUCKET).remove([previousPath]);
+    if (removeError) {
+      console.warn(`Failed to remove previous yarn photo "${previousPath}" from storage:`, removeError);
+    }
   }
 }
