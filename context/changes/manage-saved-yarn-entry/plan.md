@@ -310,16 +310,16 @@ Brak — żadna zmiana schematu nie jest wymagana.
 
 #### Automatyczne
 
-- [x] 1.1 npm run lint przechodzi
-- [x] 1.2 npm run test przechodzi (isYarnExhausted + regresja walidacji quantity=0)
-- [x] 1.3 npm run build przechodzi
-- [x] 1.4 dialog.tsx i alert-dialog.tsx istnieją po instalacji
+- [x] 1.1 npm run lint przechodzi — c999bf7
+- [x] 1.2 npm run test przechodzi (isYarnExhausted + regresja walidacji quantity=0) — c999bf7
+- [x] 1.3 npm run build przechodzi — c999bf7
+- [x] 1.4 dialog.tsx i alert-dialog.tsx istnieją po instalacji — c999bf7
 
 #### Ręczne
 
-- [x] 1.5 POST /api/yarns/[id] aktualizuje wiersz i redirectuje na /yarns/[id]
-- [x] 1.6 DELETE /api/yarns/[id] usuwa wiersz i zwraca { ok: true }
-- [x] 1.7 Edycja/usunięcie cudzej włóczki nie powodzi się mimo poprawnego UUID
+- [x] 1.5 POST /api/yarns/[id] aktualizuje wiersz i redirectuje na /yarns/[id] — c999bf7
+- [x] 1.6 DELETE /api/yarns/[id] usuwa wiersz i zwraca { ok: true } — c999bf7
+- [x] 1.7 Edycja/usunięcie cudzej włóczki nie powodzi się mimo poprawnego UUID — c999bf7
 
 ### Faza 2: Formularz edycji (UI)
 

@@ -158,14 +158,6 @@ export async function deleteYarn(supabase: SupabaseClient, userId: string, id: s
     .maybeSingle()) as { data: { photo_url: string | null } | null; error: PostgrestError | null };
   if (fetchError) throw fetchError;
 
-  const photoPath = existing?.photo_url;
-  if (photoPath) {
-    const { error: removeError } = await supabase.storage.from(YARN_PHOTOS_BUCKET).remove([photoPath]);
-    if (removeError) {
-      console.warn(`Failed to remove yarn photo "${photoPath}" from storage:`, removeError);
-    }
-  }
-
   const { data: deleted, error: deleteError } = (await supabase
     .from("yarns")
     .delete()
@@ -175,6 +167,14 @@ export async function deleteYarn(supabase: SupabaseClient, userId: string, id: s
 
   if (deleteError) throw deleteError;
   if (!deleted || deleted.length === 0) throw new Error("Delete matched no yarn row");
+
+  const photoPath = existing?.photo_url;
+  if (photoPath) {
+    const { error: removeError } = await supabase.storage.from(YARN_PHOTOS_BUCKET).remove([photoPath]);
+    if (removeError) {
+      console.warn(`Failed to remove yarn photo "${photoPath}" from storage:`, removeError);
+    }
+  }
 }
 
 export async function attachYarnPhoto(
