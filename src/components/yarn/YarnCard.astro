@@ -2,6 +2,7 @@
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import YarnPhotoPlaceholder from "@/components/yarn/YarnPhotoPlaceholder.astro";
+import { isYarnExhausted } from "@/lib/utils";
 import type { Yarn } from "@/types";
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 
 const { yarn } = Astro.props;
 const rating = yarn.rating;
+const exhausted = isYarnExhausted(yarn);
 ---
 
 <a href={`/yarns/${yarn.id}`} class="group block">
@@ -27,6 +29,13 @@ const rating = yarn.rating;
       <p class="mt-2 truncate text-sm font-medium">{yarn.name}</p>
       <p class="text-muted-foreground truncate text-xs">{yarn.manufacturer}</p>
       {yarn.color && <p class="text-muted-foreground truncate text-xs">{yarn.color}</p>}
+      {
+        exhausted && (
+          <span class="border-warning-border bg-warning text-warning-foreground mt-1 inline-block rounded-full border px-2 py-0.5 text-xs">
+            Wyczerpana
+          </span>
+        )
+      }
       {
         rating && (
           <div class="mt-1 flex items-center gap-0.5">

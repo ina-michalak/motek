@@ -92,6 +92,91 @@ export async function createYarn(supabase: SupabaseClient, userId: string, data:
   return yarn;
 }
 
+export async function updateYarn(
+  supabase: SupabaseClient,
+  userId: string,
+  id: string,
+  data: CreateYarnInput,
+): Promise<Yarn> {
+  const { data: yarn, error } = (await supabase
+    .from("yarns")
+    .update({
+      name: data.name,
+      manufacturer: data.manufacturer,
+      quantity_skeins: data.quantity_skeins ?? null,
+      quantity_grams: data.quantity_grams ?? null,
+      color: data.color ?? null,
+      dye_lot: data.dye_lot ?? null,
+      composition: data.composition.length > 0 ? data.composition : null,
+      needle_size_mm: data.needle_size_mm ?? null,
+      hook_size_mm: data.hook_size_mm ?? null,
+      gauge_note: data.gauge_note ?? null,
+      rating: data.rating ?? null,
+      note: data.note ?? null,
+    })
+    .eq("id", id)
+    .eq("user_id", userId)
+    .select()
+    .single()) as { data: Yarn | null; error: PostgrestError | null };
+
+  if (error) throw error;
+  if (!yarn) throw new Error("Update matched no yarn row");
+  return yarn;
+}
+
+export async function removeYarnPhoto(supabase: SupabaseClient, userId: string, yarnId: string): Promise<void> {
+  const { data: existing, error: fetchError } = (await supabase
+    .from("yarns")
+    .select("photo_url")
+    .eq("id", yarnId)
+    .eq("user_id", userId)
+    .maybeSingle()) as { data: { photo_url: string | null } | null; error: PostgrestError | null };
+  if (fetchError) throw fetchError;
+
+  const photoPath = existing?.photo_url;
+  if (!photoPath) return;
+
+  const { error: updateError } = await supabase
+    .from("yarns")
+    .update({ photo_url: null })
+    .eq("id", yarnId)
+    .eq("user_id", userId);
+  if (updateError) throw updateError;
+
+  const { error: removeError } = await supabase.storage.from(YARN_PHOTOS_BUCKET).remove([photoPath]);
+  if (removeError) {
+    console.warn(`Failed to remove yarn photo "${photoPath}" from storage:`, removeError);
+  }
+}
+
+export async function deleteYarn(supabase: SupabaseClient, userId: string, id: string): Promise<void> {
+  const { data: existing, error: fetchError } = (await supabase
+    .from("yarns")
+    .select("photo_url")
+    .eq("id", id)
+    .eq("user_id", userId)
+    .maybeSingle()) as { data: { photo_url: string | null } | null; error: PostgrestError | null };
+  if (fetchError) throw fetchError;
+
+  const { data: deleted, error: deleteError } = (await supabase
+    .from("yarns")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", userId)
+    .select("id")) as { data: { id: string }[] | null; error: PostgrestError | null };
+
+  if (deleteError) throw deleteError;
+  if (!deleted || deleted.length === 0) throw new Error("Delete matched no yarn row");
+
+  const photoPath = existing?.photo_url;
+  if (photoPath) {
+    const { error: removeError } = await supabase.storage.from(YARN_PHOTOS_BUCKET).remove([photoPath]);
+    if (removeError) {
+      console.warn(`Failed to remove yarn photo "${photoPath}" from storage:`, removeError);
+    }
+  }
+}
+
 export async function attachYarnPhoto(
   supabase: SupabaseClient,
   userId: string,
@@ -128,6 +213,9 @@ export async function attachYarnPhoto(
 
   const previousPath = existing?.photo_url;
   if (previousPath && previousPath !== path) {
-    await supabase.storage.from(YARN_PHOTOS_BUCKET).remove([previousPath]);
+    const { error: removeError } = await supabase.storage.from(YARN_PHOTOS_BUCKET).remove([previousPath]);
+    if (removeError) {
+      console.warn(`Failed to remove previous yarn photo "${previousPath}" from storage:`, removeError);
+    }
   }
 }

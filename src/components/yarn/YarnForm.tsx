@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CircleAlert, Plus } from "lucide-react";
+import { CircleAlert, Check, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,7 +28,14 @@ function createEmptyCompositionRow(): CompositionRow {
 const labelClass = "mb-1 block";
 
 interface Props {
+  mode: "create" | "edit";
+  action: string;
   serverError?: string | null;
+  initialValues?: Partial<TextValues>;
+  initialComposition?: CompositionRow[];
+  initialRating?: number | null;
+  existingPhotoUrl?: string | null;
+  submitLabel: string;
 }
 
 interface TextValues {
@@ -44,7 +51,7 @@ interface TextValues {
   note: string;
 }
 
-const initialValues: TextValues = {
+const emptyValues: TextValues = {
   name: "",
   manufacturer: "",
   quantity_skeins: "",
@@ -66,13 +73,25 @@ function FieldError({ message }: { message: string }) {
   );
 }
 
-export default function AddYarnForm({ serverError }: Props) {
-  const [values, setValues] = useState<TextValues>(initialValues);
-  const [composition, setComposition] = useState<CompositionRow[]>(() => [createEmptyCompositionRow()]);
-  const [rating, setRating] = useState<number | null>(null);
+export default function YarnForm({
+  mode,
+  action,
+  serverError,
+  initialValues,
+  initialComposition,
+  initialRating,
+  existingPhotoUrl,
+  submitLabel,
+}: Props) {
+  const [values, setValues] = useState<TextValues>(() => ({ ...emptyValues, ...initialValues }));
+  const [composition, setComposition] = useState<CompositionRow[]>(
+    () => initialComposition ?? [createEmptyCompositionRow()],
+  );
+  const [rating, setRating] = useState<number | null>(initialRating ?? null);
   const [photoKey, setPhotoKey] = useState(0);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
+  const [removePhoto, setRemovePhoto] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
 
   useEffect(() => {
@@ -114,6 +133,12 @@ export default function AddYarnForm({ serverError }: Props) {
     }
     setPhotoError(null);
     setPhotoPreview(URL.createObjectURL(file));
+    setRemovePhoto(false);
+  }
+
+  function handleRemovePhoto() {
+    setRemovePhoto(true);
+    setPhotoPreview(null);
   }
 
   function validate(): { valid: boolean; firstErrorKey?: string } {
@@ -167,11 +192,13 @@ export default function AddYarnForm({ serverError }: Props) {
 
   const quantityError = errors.quantity_skeins ?? errors.quantity_grams;
   const hasErrors = Object.values(errors).some(Boolean);
+  const showExistingPhoto = mode === "edit" && !!existingPhotoUrl && photoPreview === null && !removePhoto;
+  const displayedPreview = photoPreview ?? (showExistingPhoto ? existingPhotoUrl : null);
 
   return (
     <form
       method="POST"
-      action="/api/yarns"
+      action={action}
       encType="multipart/form-data"
       className="space-y-4"
       onSubmit={handleSubmit}
@@ -179,6 +206,7 @@ export default function AddYarnForm({ serverError }: Props) {
     >
       <input type="hidden" name="composition" value={serializeComposition(composition)} />
       <input type="hidden" name="rating" value={rating ?? ""} />
+      {mode === "edit" && <input type="hidden" name="remove_photo" value={removePhoto ? "true" : "false"} />}
 
       <ServerError message={hasErrors ? "Formularz zawiera błędy — popraw zaznaczone pola." : null} />
 
@@ -393,17 +421,29 @@ export default function AddYarnForm({ serverError }: Props) {
           key={photoKey}
           id="photo"
           name="photo"
-          preview={photoPreview}
+          preview={displayedPreview}
           onFileSelected={handlePhotoFile}
           invalid={!!photoError}
         />
+        {showExistingPhoto && (
+          <button
+            type="button"
+            onClick={handleRemovePhoto}
+            className="text-muted-foreground hover:text-destructive mt-1 text-xs underline"
+          >
+            Usuń zdjęcie
+          </button>
+        )}
         {photoError && <FieldError message={photoError} />}
       </div>
 
       <ServerError message={serverError} />
 
-      <SubmitButton pendingText="Zapisywanie..." icon={<Plus className="size-4" />}>
-        Dodaj włóczkę
+      <SubmitButton
+        pendingText="Zapisywanie..."
+        icon={mode === "edit" ? <Check className="size-4" /> : <Plus className="size-4" />}
+      >
+        {submitLabel}
       </SubmitButton>
     </form>
   );
