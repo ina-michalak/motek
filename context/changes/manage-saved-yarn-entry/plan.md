@@ -341,13 +341,13 @@ Brak — żadna zmiana schematu nie jest wymagana.
 
 #### Automatyczne
 
-- [ ] 3.1 npm run lint przechodzi
-- [ ] 3.2 npm run build przechodzi
+- [x] 3.1 npm run lint przechodzi
+- [x] 3.2 npm run build przechodzi
 
 #### Ręczne
 
-- [ ] 3.3 Dialog potwierdzenia pokazuje nazwę włóczki; Anuluj nie zmienia niczego
-- [ ] 3.4 Potwierdzenie usuwa włóczkę i przekierowuje do /dashboard
-- [ ] 3.5 Zdjęcie usuniętej włóczki znika ze Storage
-- [ ] 3.6 Usunięcie zaakceptowanego zamiennika nie psuje strony drugiej włóczki
-- [ ] 3.7 DELETE bez sesji zwraca 401
+- [x] 3.3 Dialog potwierdzenia pokazuje nazwę włóczki; Anuluj nie zmienia niczego
+- [x] 3.4 Potwierdzenie usuwa włóczkę i przekierowuje do /dashboard
+- [x] 3.5 Zdjęcie usuniętej włóczki znika ze Storage
+- [x] 3.6 Usunięcie zaakceptowanego zamiennika nie psuje strony drugiej włóczki
+- [x] 3.7 DELETE bez sesji zwraca 401
