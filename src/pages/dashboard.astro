@@ -5,13 +5,21 @@ import YarnCard from "@/components/yarn/YarnCard.astro";
 import YarnPhotoPlaceholder from "@/components/yarn/YarnPhotoPlaceholder.astro";
 import { createClient } from "@/lib/supabase";
 import { listYarns } from "@/lib/services/yarns";
+import YarnFilters from "@/components/yarn/YarnFilters";
+import { parseYarnFilters, filterAndSortYarns, getYarnFilterOptions, hasActiveYarnFilters } from "@/lib/yarn-filters";
 
 export const prerender = false;
 
 const { user } = Astro.locals;
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 const yarns = supabase && user ? await listYarns(supabase, user.id) : [];
+const { criteria, sort } = parseYarnFilters(Astro.url.searchParams);
+const options = getYarnFilterOptions(yarns);
+const visibleYarns = filterAndSortYarns(yarns, criteria, sort);
 const warning = Astro.url.searchParams.get("warning");
+const filtersOpenParam = Astro.url.searchParams.get("filtersOpen");
+const filtersOpen = filtersOpenParam !== null ? filtersOpenParam === "1" : hasActiveYarnFilters(criteria);
+const filtersActive = hasActiveYarnFilters(criteria);
 ---
 
 <Layout title="Twoje włóczki">
@@ -28,7 +36,9 @@ const warning = Astro.url.searchParams.get("warning");
 
       <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
         <h1 class="text-2xl font-bold sm:text-3xl">
-          Twoje włóczki <span class="text-muted-foreground">({yarns.length})</span>
+          Twoje włóczki <span class="text-muted-foreground">
+            {filtersActive ? `(Pokazano ${visibleYarns.length} z ${yarns.length})` : `(${yarns.length})`}
+          </span>
         </h1>
         <div class="flex items-center gap-3">
           <a
@@ -48,6 +58,14 @@ const warning = Astro.url.searchParams.get("warning");
         </div>
       </div>
 
+      <YarnFilters
+        options={options}
+        initialCriteria={criteria}
+        initialSort={sort}
+        defaultOpen={filtersOpen}
+        client:load
+      />
+
       {
         yarns.length === 0 ? (
           <div class="border-border bg-card flex flex-col items-center rounded-2xl border p-12 text-center">
@@ -62,7 +80,7 @@ const warning = Astro.url.searchParams.get("warning");
           </div>
         ) : (
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {yarns.map((yarn) => (
+            {visibleYarns.map((yarn) => (
               <YarnCard yarn={yarn} />
             ))}
           </div>

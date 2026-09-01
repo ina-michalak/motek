@@ -247,18 +247,18 @@ Brak — zero zmian schematu bazy danych, zero zmian istniejących endpointów A
 
 #### Automatyczne
 
-- [ ] 2.1 Linting przechodzi: `npm run lint`
-- [ ] 2.2 Build przechodzi: `npm run build`
+- [x] 2.1 Linting przechodzi: `npm run lint`
+- [x] 2.2 Build przechodzi: `npm run build`
 
 #### Ręczne
 
-- [ ] 2.3 Każdy z 6 filtrów samodzielnie zawęża listę poprawnie
-- [ ] 2.4 Kombinacja filtrów działa jako AND
-- [ ] 2.5 Wielokrotny wybór składu działa jako OR
-- [ ] 2.6 Wszystkie 10 opcji sortowania daje poprawną kolejność (w tym brakujące pola na końcu)
-- [ ] 2.7 Zmiana filtra/sortowania przeładowuje URL; wstecz/dalej działa
-- [ ] 2.8 Panel domyślnie zwinięty/rozwinięty zgodnie z obecnością aktywnych filtrów
-- [ ] 2.9 Odświeżenie strony odtwarza stan kontrolek z URL
+- [x] 2.3 Każdy z 6 filtrów samodzielnie zawęża listę poprawnie
+- [x] 2.4 Kombinacja filtrów działa jako AND
+- [x] 2.5 Wielokrotny wybór składu działa jako OR
+- [x] 2.6 Wszystkie 10 opcji sortowania daje poprawną kolejność (w tym brakujące pola na końcu)
+- [x] 2.7 Zmiana filtra/sortowania przeładowuje URL; wstecz/dalej działa
+- [x] 2.8 Panel domyślnie zwinięty/rozwinięty zgodnie z obecnością aktywnych filtrów
+- [x] 2.9 Odświeżenie strony odtwarza stan kontrolek z URL
 
 ### Faza 3: UX polish — puste stany, licznik i wyczyść filtry
 
