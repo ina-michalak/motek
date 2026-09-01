@@ -163,6 +163,21 @@ describe("filterAndSortYarns — kombinacja filtrów (AND)", () => {
   });
 });
 
+describe("filterAndSortYarns — niemutowalność", () => {
+  it("nie mutuje ani nie zmienia kolejności wejściowej tablicy", () => {
+    const yarns = [
+      makeYarn({ name: "Stara", created_at: "2026-01-01T00:00:00.000Z" }),
+      makeYarn({ name: "Nowa", created_at: "2026-02-01T00:00:00.000Z" }),
+    ];
+    const originalOrder = yarns.map((y) => y.name);
+
+    const result = filterAndSortYarns(yarns, {}, "created_asc");
+
+    expect(result).not.toBe(yarns);
+    expect(yarns.map((y) => y.name)).toEqual(originalOrder);
+  });
+});
+
 describe("filterAndSortYarns — sortowanie", () => {
   it("created_desc: najnowsze pierwsze (domyślne zachowanie)", () => {
     const yarns = [

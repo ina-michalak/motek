@@ -239,9 +239,9 @@ Brak — zero zmian schematu bazy danych, zero zmian istniejących endpointów A
 
 #### Automatyczne
 
-- [x] 1.1 Testy jednostkowe przechodzą: `npm run test`
-- [x] 1.2 Linting przechodzi: `npm run lint`
-- [x] 1.3 Build przechodzi: `npm run build`
+- [x] 1.1 Testy jednostkowe przechodzą: `npm run test` — f3761e2
+- [x] 1.2 Linting przechodzi: `npm run lint` — f3761e2
+- [x] 1.3 Build przechodzi: `npm run build` — f3761e2
 
 ### Faza 2: UI — kontrolki filtrów i sortowania
 
