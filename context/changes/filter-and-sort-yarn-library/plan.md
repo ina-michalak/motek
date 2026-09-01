@@ -247,8 +247,8 @@ Brak — zero zmian schematu bazy danych, zero zmian istniejących endpointów A
 
 #### Automatyczne
 
-- [x] 2.1 Linting przechodzi: `npm run lint`
-- [x] 2.2 Build przechodzi: `npm run build`
+- [x] 2.1 Linting przechodzi: `npm run lint` — 372049c
+- [x] 2.2 Build przechodzi: `npm run build` — 372049c
 
 #### Ręczne
 

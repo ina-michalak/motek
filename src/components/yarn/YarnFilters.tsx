@@ -71,8 +71,8 @@ export default function YarnFilters({ options, initialCriteria, initialSort, def
 
   return (
     <form method="GET" action="/dashboard" className="border-border bg-card mb-6 rounded-2xl border p-4">
-      <input type="hidden" name="sort" value={combineSort(sortField, sortDirection)} />
-      <input type="hidden" name="filtersOpen" value={isOpen ? "1" : "0"} />
+      <input type="hidden" name="sort" value={combineSort(sortField, sortDirection)} readOnly />
+      <input type="hidden" name="filtersOpen" value={isOpen ? "1" : "0"} readOnly />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
@@ -130,6 +130,7 @@ export default function YarnFilters({ options, initialCriteria, initialSort, def
               setIsOpen((prev) => !prev);
             }}
             aria-expanded={isOpen}
+            aria-controls="yarn-filters-panel"
           >
             <SlidersHorizontal className="size-4" />
             Filtry
@@ -139,6 +140,7 @@ export default function YarnFilters({ options, initialCriteria, initialSort, def
       </div>
 
       <div
+        id="yarn-filters-panel"
         className={
           isOpen ? "border-border mt-4 grid grid-cols-1 gap-4 border-t pt-4 sm:grid-cols-2 lg:grid-cols-3" : "hidden"
         }
