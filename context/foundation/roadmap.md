@@ -3,7 +3,7 @@ project: "Motek"
 version: 1
 status: draft
 created: 2026-08-19
-updated: 2026-08-31
+updated: 2026-09-05
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -33,7 +33,7 @@ Rękodzielniczki i rękodzielnicy z zapasem włóczki (30+ motków) nie mają wy
 | S-01 | add-and-browse-yarn-library   | dodać włóczkę i przeglądać swoją bibliotekę                            | F-01                | FR-002, FR-003, US-01         | done |
 | S-02 | ai-substitute-suggestions     | zobaczyć sugestie AI zamienników i zaakceptować/odrzucić je            | S-01                | FR-007, FR-008, FR-009, US-01 | done |
 | S-03 | manage-saved-yarn-entry       | edytować zapisaną włóczkę (w tym oznaczyć jako wyczerpaną) lub usunąć  | S-01                | FR-005, FR-006                | done |
-| S-04 | filter-and-sort-yarn-library  | filtrować i sortować listę włóczek                                     | S-01                | FR-004                        | proposed |
+| S-04 | filter-and-sort-yarn-library  | filtrować i sortować listę włóczek                                     | S-01                | FR-004                        | done |
 
 ## Baza
 
@@ -111,10 +111,12 @@ Fundamenty poniżej zakładają, że te elementy są obecne i NIE tworzą ich po
 - **Wymagania wstępne:** S-01
 - **Równolegle z:** S-02, S-03
 - **Blokady:** —
-- **Niewiadome:**
-  - Które konkretnie parametry sortowania są potrzebne na start? (PRD dopuszcza, by sortowanie na starcie nie obejmowało wszystkich parametrów) — Właściciel: user. Blokuje: nie.
+- **Niewiadome:** — (rozwiązane 2026-09-01, ustalone z userem)
+  - **Filtry:** producent (lista wartości z biblioteki); dostępność (przełącznik "ukryj wyczerpane", ilość = 0); kolor (lista wartości z biblioteki); skład/rodzaj włókna (po `composition`); rozmiar drutów i rozmiar szydełka (dwie osobne listy wartości z biblioteki, `needle_size_mm` i `hook_size_mm`); ilość — próg minimalny, osobno dla motków (`quantity_skeins`) i gramatury (`quantity_grams`).
+  - **Sortowanie:** data dodania (kierunek najnowsze/najstarsze — dziś to już domyślne zachowanie); nazwa (A-Z/Z-A); ocena (najwyżej/najniżej); ilość (największy/najmniejszy zapas).
+  - Uzasadnienie progu minimalnego zamiast tylko sortowania po ilości: user chce móc zawęzić listę do włóczek, których starczy na konkretny projekt (np. "pokaż tylko te z min. 2 motkami") — samo sortowanie tego nie daje, bo nadal trzeba by przescrollować całą listę.
 - **Ryzyko:** Wartość rośnie wraz z wielkością biblioteki (docelowa persona ma 30+ motków) — przy małej liczbie testowych włóczek na start ryzyko niskiej użyteczności jest niewielkie, ale odkładanie tego fragmentu zbyt daleko utrudnia korzystanie z rosnącej biblioteki.
-- **Status:** proposed
+- **Status:** done
 
 ## Przekazanie do backlogu
 
@@ -128,7 +130,7 @@ Fundamenty poniżej zakładają, że te elementy są obecne i NIE tworzą ich po
 
 ## Otwarte pytania dotyczące mapy drogowej
 
-Brak pytań przekrojowych (obejmujących wiele fragmentów) w tej chwili. Jedyne otwarte pytanie z PRD dotyczy konkretnie formularza dodawania włóczki i znajduje się przy niewiadomych fragmentu S-01. Pytanie o zakres sortowania (S-04) jest lokalne dla tego fragmentu.
+Brak pytań przekrojowych (obejmujących wiele fragmentów) w tej chwili. Jedyne otwarte pytanie z PRD dotyczy konkretnie formularza dodawania włóczki i znajduje się przy niewiadomych fragmentu S-01. Pytanie o zakres filtrowania/sortowania (S-04) zostało rozwiązane z userem 2026-09-01 — patrz niewiadome S-04.
 
 ## Zaparkowane
 
@@ -140,6 +142,10 @@ Brak pytań przekrojowych (obejmujących wiele fragmentów) w tej chwili. Jedyne
 - **Uczenie się ogólnych preferencji usera z historii decyzji ("AI uczące się gustu")** — Dlaczego zaparkowane: PRD §Non-Goals — zamiast tego proste dopasowanie parametrów + trwałe odrzucenie danej pary.
 - **Sugestie zamienników na podstawie szerszej bazy danych o włóczkach z internetu** — Dlaczego zaparkowane: shape-notes §Forward — świadomie odłożone poza MVP.
 - **Wyjaśnienie userowi "dlaczego to jest rekomendacja"** — Dlaczego zaparkowane: shape-notes §Forward — nie blokuje MVP, do rozważenia jako rozszerzenie.
+
+## Done
+
+- **S-04: filtrować i sortować listę włóczek** — Archived 2026-09-05 → `context/archive/2026-09-01-filter-and-sort-yarn-library/`. Lesson: —.
 
 ## Zrobione
 
