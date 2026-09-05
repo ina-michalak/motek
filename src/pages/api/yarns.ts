@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import * as Sentry from "@sentry/astro";
 import { createClient } from "@/lib/supabase";
 import { createYarnSchema, validateYarnPhoto } from "@/lib/validation/yarn";
 import { attachYarnPhoto, createYarn } from "@/lib/services/yarns";
@@ -55,6 +56,7 @@ export const POST: APIRoute = async (context) => {
   try {
     yarn = await createYarn(supabase, context.locals.user.id, parsed.data);
   } catch (error) {
+    Sentry.captureException(error);
     console.error("Failed to create yarn:", error);
     const message = toErrorMessage(error, "Nie udało się zapisać włóczki");
     return context.redirect(`/yarns/new?error=${encodeURIComponent(message)}`);
@@ -64,6 +66,7 @@ export const POST: APIRoute = async (context) => {
     try {
       await attachYarnPhoto(supabase, context.locals.user.id, yarn.id, photo);
     } catch (error) {
+      Sentry.captureException(error);
       console.warn("Failed to attach yarn photo:", error);
       const message = "Włóczka została zapisana, ale nie udało się zapisać zdjęcia.";
       return context.redirect(`/dashboard?warning=${encodeURIComponent(message)}`);

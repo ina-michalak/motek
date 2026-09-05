@@ -284,22 +284,22 @@ Brak — to czysto addytywna zmiana, nowa integracja bez modyfikacji istniejący
 
 #### Automatyczne
 
-- [x] 2.1 .env.example zawiera linię SENTRY_DSN=###
+- [x] 2.1 .env.example zawiera linię SENTRY_DSN=### — 597aa4d
 
 #### Ręczne
 
-- [x] 2.2 vercel env ls pokazuje SENTRY_DSN dla Production, Preview i Development
+- [x] 2.2 vercel env ls pokazuje SENTRY_DSN dla Production, Preview i Development — 597aa4d
 
 ### Faza 3: Podłączenie do istniejących miejsc obsługi błędów
 
 #### Automatyczne
 
-- [ ] 3.1 npm run typecheck przechodzi
-- [ ] 3.2 npm run lint przechodzi
+- [x] 3.1 npm run typecheck przechodzi
+- [x] 3.2 npm run lint przechodzi
 
 #### Ręczne
 
-- [ ] 3.3 Przegląd kodu: wszystkie 7 bloków catch wywołuje Sentry.captureException(error)
+- [x] 3.3 Przegląd kodu: wszystkie 7 bloków catch wywołuje Sentry.captureException(error)
 
 ### Faza 4: Weryfikacja end-to-end
 

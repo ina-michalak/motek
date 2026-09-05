@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
+import * as Sentry from "@sentry/astro";
 import { createClient } from "@/lib/supabase";
 import { createYarnSchema, validateYarnPhoto } from "@/lib/validation/yarn";
 import { attachYarnPhoto, deleteYarn, removeYarnPhoto, updateYarn } from "@/lib/services/yarns";
@@ -62,6 +63,7 @@ export const POST: APIRoute = async (context) => {
   try {
     await updateYarn(supabase, userId, id, parsed.data);
   } catch (error) {
+    Sentry.captureException(error);
     console.error("Failed to update yarn:", error);
     const message = toErrorMessage(error, "Nie udało się zapisać zmian");
     return context.redirect(`/yarns/${id}?error=${encodeURIComponent(message)}&edit=1`);
@@ -71,6 +73,7 @@ export const POST: APIRoute = async (context) => {
     try {
       await attachYarnPhoto(supabase, userId, id, photo);
     } catch (error) {
+      Sentry.captureException(error);
       console.warn("Failed to attach yarn photo:", error);
       const message = "Zmiany zostały zapisane, ale nie udało się zapisać zdjęcia.";
       return context.redirect(`/yarns/${id}?warning=${encodeURIComponent(message)}`);
@@ -79,6 +82,7 @@ export const POST: APIRoute = async (context) => {
     try {
       await removeYarnPhoto(supabase, userId, id);
     } catch (error) {
+      Sentry.captureException(error);
       console.warn("Failed to remove yarn photo:", error);
       const message = "Zmiany zostały zapisane, ale nie udało się usunąć zdjęcia.";
       return context.redirect(`/yarns/${id}?warning=${encodeURIComponent(message)}`);
@@ -107,6 +111,7 @@ export const DELETE: APIRoute = async (context) => {
   try {
     await deleteYarn(supabase, context.locals.user.id, id);
   } catch (error) {
+    Sentry.captureException(error);
     console.error("Failed to delete yarn:", error);
     const message = toErrorMessage(error, "Nie udało się usunąć włóczki");
     return Response.json({ error: message }, { status: 400 });

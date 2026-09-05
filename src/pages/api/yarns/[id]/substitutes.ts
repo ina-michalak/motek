@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
+import * as Sentry from "@sentry/astro";
 import { createClient } from "@/lib/supabase";
 import { substituteDecisionSchema } from "@/lib/validation/substitute";
 import { recordSubstituteDecision } from "@/lib/services/substitutes";
@@ -50,6 +51,7 @@ export const POST: APIRoute = async (context) => {
       parsed.data.status,
     );
   } catch (error) {
+    Sentry.captureException(error);
     console.error("Failed to record substitute decision:", error);
     const message = toErrorMessage(error, "Nie udało się zapisać decyzji");
     return Response.json({ error: message }, { status: 400 });
