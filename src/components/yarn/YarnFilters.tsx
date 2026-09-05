@@ -322,8 +322,8 @@ export default function YarnFilters({ options, initialCriteria, initialSort, def
 
         <div
           className={cn(
-            "bg-card border-border sticky bottom-0 -mx-4 -mb-4 flex justify-end border-t px-4 py-3",
-            "sm:static sm:col-span-2 sm:m-0 sm:border-0 sm:p-0 lg:col-span-3",
+            "bg-card border-border sticky bottom-0 z-10 -mx-4 -mb-4 flex justify-end rounded-b-2xl border-t px-4 py-3 pr-14",
+            "sm:static sm:col-span-2 sm:m-0 sm:rounded-none sm:border-0 sm:p-0 sm:pr-0 lg:col-span-3",
           )}
         >
           <Button

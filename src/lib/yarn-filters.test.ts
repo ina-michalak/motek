@@ -334,6 +334,11 @@ describe("parseYarnFilters", () => {
     expect(criteria.minSkeins).toBeUndefined();
   });
 
+  it("ignoruje ujemne wartości liczbowe", () => {
+    const { criteria } = parseYarnFilters(new URLSearchParams({ minSkeins: "-5" }));
+    expect(criteria.minSkeins).toBeUndefined();
+  });
+
   it("hideExhausted jest ustawiane tylko dla wartości '1'", () => {
     expect(parseYarnFilters(new URLSearchParams({ hideExhausted: "true" })).criteria.hideExhausted).toBeUndefined();
     expect(parseYarnFilters(new URLSearchParams({ hideExhausted: "1" })).criteria.hideExhausted).toBe(true);
