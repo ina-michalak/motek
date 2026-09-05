@@ -184,11 +184,11 @@ Nie dotyczy — brak zmian w schemacie bazy.
 
 #### Automatyczne
 
-- [x] 2.1 Testy integracyjne przechodzą lokalnie: `npx supabase start && npm run test`
-- [x] 2.2 Sprawdzanie typów przechodzi: `npx astro check` (1 przedistniejący błąd w `src/components/yarn/DeleteYarnButton.tsx:67`, niezwiązany z tą fazą — istniał już przed commitem 4c121fd; nowy plik testowy nie wprowadza żadnych błędów typów)
-- [x] 2.3 Linting przechodzi: `npm run lint`
+- [x] 2.1 Testy integracyjne przechodzą lokalnie: `npx supabase start && npm run test` — c682544
+- [x] 2.2 Sprawdzanie typów przechodzi: `npx astro check` (1 przedistniejący błąd w `src/components/yarn/DeleteYarnButton.tsx:67`, niezwiązany z tą fazą — istniał już przed commitem 4c121fd; nowy plik testowy nie wprowadza żadnych błędów typów) — c682544
+- [x] 2.3 Linting przechodzi: `npm run lint` — c682544
 
 #### Ręczne
 
-- [x] 2.4 Tabela `yarns` w Supabase Studio jest czysta po teście
-- [x] 2.5 Test 2 faktycznie czerwienieje przy celowo zepsutej asercji (dowód, że nie jest testem-lustrem)
+- [x] 2.4 Tabela `yarns` w Supabase Studio jest czysta po teście — c682544
+- [x] 2.5 Test 2 faktycznie czerwienieje przy celowo zepsutej asercji (dowód, że nie jest testem-lustrem) — c682544
