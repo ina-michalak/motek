@@ -294,12 +294,12 @@ Brak — to czysto addytywna zmiana, nowa integracja bez modyfikacji istniejący
 
 #### Automatyczne
 
-- [x] 3.1 npm run typecheck przechodzi
-- [x] 3.2 npm run lint przechodzi
+- [x] 3.1 npm run typecheck przechodzi — 5b446bf
+- [x] 3.2 npm run lint przechodzi — 5b446bf
 
 #### Ręczne
 
-- [x] 3.3 Przegląd kodu: wszystkie 7 bloków catch wywołuje Sentry.captureException(error)
+- [x] 3.3 Przegląd kodu: wszystkie 7 bloków catch wywołuje Sentry.captureException(error) — 5b446bf
 
 ### Faza 4: Weryfikacja end-to-end
 

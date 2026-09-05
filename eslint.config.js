@@ -74,6 +74,8 @@ const astroConfig = tseslint.config({
 
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
+  // Full ESLint ignore (not just type-aware linting) — these are Node scripts run
+  // by the Claude Code harness, not part of the tsconfig project.
   { ignores: [".claude/hooks/**"] },
   baseConfig,
   reactConfig,
