@@ -123,7 +123,7 @@ Jak dodawać nowe testy w tym projekcie. Każda podsekcja wypełnia się, gdy od
 - **Wymóg uruchomienia**: `npx supabase start` musi działać przed `npm run test` — helper domyślnie wskazuje na lokalny URL/klucz (`http://127.0.0.1:54321`), z możliwością nadpisania przez `SUPABASE_TEST_URL`/`SUPABASE_TEST_ANON_KEY` (np. dla CI).
 - **Sprzątanie danych**: jawne usunięcie utworzonych wierszy w `afterEach` (np. `supabase.from("<tabela>").delete().eq("user_id", userId)`) — konta testowe w `auth.users` nie są sprzątane (celowy kompromis, lokalna baza jest efemeryczna).
 - **Bez mockowania Supabase** — zaślepka skłamałaby o RLS i constraintach bazy, które są właśnie tym, co te testy mają udowodnić.
-- **Test referencyjny**: `src/lib/services/yarns.integration.test.ts` (Faza 1, Ryzyko #1).
+- **Test referencyjny**: `src/lib/services/yarns.integration.test.ts` — dwa testy: poprawny zapis tworzy wiersz potwierdzony niezależnym odczytem (nie tym samym `.select().single()`, który wykonał insert); brak wymaganej ilości jest odrzucany przez constraint bazy `yarns_quantity_present`, bez powstania wiersza.
 
 ### 6.3 Dodawanie testu e2e
 

@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { afterEach, beforeAll, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { createYarn } from "@/lib/services/yarns";
 import { createTestSupabaseSession } from "@/lib/testing/supabase-test-client";
 import type { CreateYarnInput } from "@/lib/validation/yarn";
@@ -28,7 +28,7 @@ describe("createYarn (integration)", () => {
   let supabase: SupabaseClient;
   let userId: string;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     ({ supabase, userId } = await createTestSupabaseSession());
   });
 
