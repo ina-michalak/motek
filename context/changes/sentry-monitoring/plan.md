@@ -272,23 +272,23 @@ Brak — to czysto addytywna zmiana, nowa integracja bez modyfikacji istniejący
 
 #### Automatyczne
 
-- [x] 1.1 npm run typecheck przechodzi
-- [x] 1.2 npm run lint przechodzi
-- [x] 1.3 npm run build kończy się sukcesem
+- [x] 1.1 npm run typecheck przechodzi — a788442
+- [x] 1.2 npm run lint przechodzi — a788442
+- [x] 1.3 npm run build kończy się sukcesem — a788442
 
 #### Ręczne
 
-- [x] 1.4 npm run dev startuje bez nowych błędów/ostrzeżeń związanych z Sentry
+- [x] 1.4 npm run dev startuje bez nowych błędów/ostrzeżeń związanych z Sentry — a788442
 
 ### Faza 2: Sekrety i środowiska
 
 #### Automatyczne
 
-- [ ] 2.1 .env.example zawiera linię SENTRY_DSN=###
+- [x] 2.1 .env.example zawiera linię SENTRY_DSN=###
 
 #### Ręczne
 
-- [ ] 2.2 vercel env ls pokazuje SENTRY_DSN dla Production, Preview i Development
+- [x] 2.2 vercel env ls pokazuje SENTRY_DSN dla Production, Preview i Development
 
 ### Faza 3: Podłączenie do istniejących miejsc obsługi błędów
 
