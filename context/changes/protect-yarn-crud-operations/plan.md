@@ -172,23 +172,23 @@ Nie dotyczy — brak zmian w schemacie bazy.
 
 #### Automatyczne
 
-- [x] 1.1 Sprawdzanie typów przechodzi: `npx astro check`
-- [x] 1.2 Linting przechodzi: `npm run lint`
-- [x] 1.3 Plik `src/lib/testing/supabase-test-client.ts` istnieje i eksportuje `createTestSupabaseSession`
+- [x] 1.1 Sprawdzanie typów przechodzi: `npx astro check` — 4c121fd
+- [x] 1.2 Linting przechodzi: `npm run lint` — 4c121fd
+- [x] 1.3 Plik `src/lib/testing/supabase-test-client.ts` istnieje i eksportuje `createTestSupabaseSession` — 4c121fd
 
 #### Ręczne
 
-- [x] 1.4 Helper faktycznie tworzy nowego użytkownika widocznego w Supabase Studio
+- [x] 1.4 Helper faktycznie tworzy nowego użytkownika widocznego w Supabase Studio — 4c121fd
 
 ### Faza 2: Test integracyjny dla Ryzyka #1
 
 #### Automatyczne
 
-- [ ] 2.1 Testy integracyjne przechodzą lokalnie: `npx supabase start && npm run test`
-- [ ] 2.2 Sprawdzanie typów przechodzi: `npx astro check`
-- [ ] 2.3 Linting przechodzi: `npm run lint`
+- [x] 2.1 Testy integracyjne przechodzą lokalnie: `npx supabase start && npm run test`
+- [x] 2.2 Sprawdzanie typów przechodzi: `npx astro check` (1 przedistniejący błąd w `src/components/yarn/DeleteYarnButton.tsx:67`, niezwiązany z tą fazą — istniał już przed commitem 4c121fd; nowy plik testowy nie wprowadza żadnych błędów typów)
+- [x] 2.3 Linting przechodzi: `npm run lint`
 
 #### Ręczne
 
-- [ ] 2.4 Tabela `yarns` w Supabase Studio jest czysta po teście
-- [ ] 2.5 Test 2 faktycznie czerwienieje przy celowo zepsutej asercji (dowód, że nie jest testem-lustrem)
+- [x] 2.4 Tabela `yarns` w Supabase Studio jest czysta po teście
+- [x] 2.5 Test 2 faktycznie czerwienieje przy celowo zepsutej asercji (dowód, że nie jest testem-lustrem)
