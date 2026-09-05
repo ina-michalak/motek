@@ -1,7 +1,7 @@
 ---
 change_id: sentry-monitoring
 title: Konfiguracja monitoringu błędów Sentry
-status: impl_reviewed
+status: implemented
 created: 2026-09-05
 updated: 2026-09-05
 archived_at: null

@@ -305,10 +305,10 @@ Brak — to czysto addytywna zmiana, nowa integracja bez modyfikacji istniejący
 
 #### Automatyczne
 
-- [x] 4.1 npm run typecheck i npm run lint przechodzą z nowym plikiem testowym
+- [x] 4.1 npm run typecheck i npm run lint przechodzą z nowym plikiem testowym — f35e5ad
 
 #### Ręczne
 
-- [x] 4.2 Błąd lokalny widoczny w Sentry z environment: development, bez danych osobowych
-- [x] 4.3 Błąd z Vercel Preview widoczny w Sentry z environment: preview
-- [x] 4.4 Plik src/pages/api/debug/sentry-test.ts usunięty przed połączeniem z main
+- [x] 4.2 Błąd lokalny widoczny w Sentry z environment: development, bez danych osobowych — 6a2f9f8
+- [x] 4.3 Błąd z Vercel Preview widoczny w Sentry z environment: preview — 6a2f9f8
+- [x] 4.4 Plik src/pages/api/debug/sentry-test.ts usunięty przed połączeniem z main — 6a2f9f8
