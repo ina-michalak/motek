@@ -1,5 +1,10 @@
 import { defineMiddleware } from "astro:middleware";
 import { createClient } from "@/lib/supabase";
+// @sentry/astro only auto-injects sentry.server.config into Astro *page* SSR bundles
+// (astro's isPage() excludes .ts endpoints), so a request that hits an API route
+// without an earlier page render in the same server instance never initializes Sentry.
+// Importing the init file here guarantees it runs on every request, page or API.
+import "../sentry.server.config";
 
 const PROTECTED_ROUTES = ["/dashboard", "/yarns"];
 
