@@ -1,9 +1,9 @@
 ---
 change_id: filter-and-sort-yarn-library
 title: Filter and sort yarn library
-status: impl_reviewed
+status: implemented
 created: 2026-09-01
-updated: 2026-09-01
+updated: 2026-09-05
 ---
 
 ## Notes
