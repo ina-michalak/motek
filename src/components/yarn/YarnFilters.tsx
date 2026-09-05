@@ -319,6 +319,22 @@ export default function YarnFilters({ options, initialCriteria, initialSort, def
             }}
           />
         </div>
+
+        <div
+          className={cn(
+            "bg-card border-border sticky bottom-0 -mx-4 -mb-4 flex justify-end border-t px-4 py-3",
+            "sm:static sm:col-span-2 sm:m-0 sm:border-0 sm:p-0 lg:col-span-3",
+          )}
+        >
+          <Button
+            type="button"
+            onClick={() => {
+              setIsOpen(false);
+            }}
+          >
+            Pokaż wyniki
+          </Button>
+        </div>
       </div>
     </form>
   );

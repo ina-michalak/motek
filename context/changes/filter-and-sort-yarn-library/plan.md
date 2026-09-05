@@ -264,14 +264,14 @@ Brak — zero zmian schematu bazy danych, zero zmian istniejących endpointów A
 
 #### Automatyczne
 
-- [ ] 3.1 Testy jednostkowe przechodzą: `npm run test`
-- [ ] 3.2 Linting przechodzi: `npm run lint`
-- [ ] 3.3 Build przechodzi: `npm run build`
+- [x] 3.1 Testy jednostkowe przechodzą: `npm run test`
+- [x] 3.2 Linting przechodzi: `npm run lint`
+- [x] 3.3 Build przechodzi: `npm run build`
 
 #### Ręczne
 
-- [ ] 3.4 Komunikat "brak wyników" i link czyszczący działają przy zerowych wynikach filtrów
-- [ ] 3.5 Licznik "Pokazano X z Y" pojawia się/znika poprawnie
-- [ ] 3.6 "Wyczyść filtry" zeruje filtry, zachowuje sortowanie
-- [ ] 3.7 Panel użyteczny na widoku mobilnym
-- [ ] 3.8 Brak regresji na pustym stanie biblioteki bez żadnej włóczki
+- [x] 3.4 Komunikat "brak wyników" i link czyszczący działają przy zerowych wynikach filtrów
+- [x] 3.5 Licznik "Pokazano X z Y" pojawia się/znika poprawnie
+- [x] 3.6 "Wyczyść filtry" zeruje filtry, zachowuje sortowanie
+- [x] 3.7 Panel użyteczny na widoku mobilnym
+- [x] 3.8 Brak regresji na pustym stanie biblioteki bez żadnej włóczki
