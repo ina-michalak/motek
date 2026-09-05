@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Trash2 } from "lucide-react";
 import {
   AlertDialog,
@@ -23,7 +23,7 @@ export default function DeleteYarnButton({ yarnId, yarnName }: Props) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleConfirm(event: Event) {
+  async function handleConfirm(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     setError(null);
     setIsDeleting(true);
