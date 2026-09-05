@@ -26,3 +26,13 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 .env*
+
+# playwright-cli artifacts and saved auth sessions
+.playwright-cli/
+auth.json
+
+# playwright test runner artifacts
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.auth/
