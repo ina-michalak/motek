@@ -1,0 +1,57 @@
+# Znane ograniczenie (zweryfikowane empirycznie w Fazie 5 ci-cd-code-review): domyślny model
+# produkcyjny openai/gpt-4o-mini nie wykrywa niezawodnie wszystkich trzech wstrzykniętych wad na
+# fixture `fixtures/motek-flaws.diff` — w jednym z przebiegów zwrócił verdict: pass dla PR-a z 3
+# poważnymi wadami (brak RLS, brak walidacji zod, brak cleanupu w useEffect), podczas gdy
+# z-ai/glm-5.1 łapał wszystkie trzy konsekwentnie. Świadoma decyzja: gate jest informacyjny, nie
+# blokujący na merge, więc pozostaje domyślnym modelem — human-in-the-loop nadal przegląda PR.
+description: "Ewaluacja agenta code-review (packages/code-reviewer) na 3 modelach OpenRouter, na diffie z wstrzykniętymi wadami"
+
+providers:
+  - id: file://./provider.ts
+    label: openai/gpt-4o-mini
+    config:
+      model: openai/gpt-4o-mini
+  - id: file://./provider.ts
+    label: z-ai/glm-5.1
+    config:
+      model: z-ai/glm-5.1
+  - id: file://./provider.ts
+    label: deepseek/deepseek-v4-flash
+    config:
+      model: deepseek/deepseek-v4-flash
+
+tests:
+  - vars:
+      diffPath: fixtures/motek-flaws.diff
+      title: "Dodaj powiadomienia o niskim stanie włóczki"
+      body: >-
+        Nowa tabela yarn_notifications, endpoint POST /api/yarns/[id]/notify oraz komponent
+        LowStockBanner subskrybujący powiadomienia w czasie rzeczywistym przez Supabase Realtime.
+    assert:
+      - type: is-json
+      - type: javascript
+        value: "JSON.parse(output).verdict === 'fail'"
+      - type: llm-rubric
+        value: >-
+          Recenzja wykrywa, że nowa tabela Supabase (yarn_notifications) nie ma włączonego
+          Row Level Security ani polityk dostępu (brak RLS).
+        provider:
+          id: openrouter:z-ai/glm-5.1
+          config:
+            apiKeyEnvar: OPENROUTER_API_KEY
+      - type: llm-rubric
+        value: >-
+          Recenzja wykrywa, że nowy endpoint API (POST /api/yarns/[id]/notify) nie waliduje danych
+          wejściowych przez zod i/lub nie eksportuje `export const prerender = false`.
+        provider:
+          id: openrouter:z-ai/glm-5.1
+          config:
+            apiKeyEnvar: OPENROUTER_API_KEY
+      - type: llm-rubric
+        value: >-
+          Recenzja wykrywa, że hook useEffect w komponencie LowStockBanner rejestruje subskrypcję
+          kanału Supabase Realtime bez funkcji czyszczącej (cleanup) zwracanej z efektu.
+        provider:
+          id: openrouter:z-ai/glm-5.1
+          config:
+            apiKeyEnvar: OPENROUTER_API_KEY

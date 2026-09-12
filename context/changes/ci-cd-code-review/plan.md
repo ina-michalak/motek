@@ -408,22 +408,22 @@ Domykamy zmianę: dokumentacja, sekrety/etykiety w repo, realny testowy PR, revi
 
 #### Automatyczne
 
-- [x] 4.1 Zmieniony `ci.yml` przechodzi walidację YAML
-- [x] 4.2 Nowe kroki (`npm ci`/`typecheck`/`test --prefix`) wykonują się i przechodzą w Actions
+- [x] 4.1 Zmieniony `ci.yml` przechodzi walidację YAML — 21f4fcf
+- [x] 4.2 Nowe kroki (`npm ci`/`typecheck`/`test --prefix`) wykonują się i przechodzą w Actions — 21f4fcf
 
 #### Ręczne
 
-- [x] 4.3 Potwierdzenie, że `npm run lint` z roota obejmuje `packages/code-reviewer/**/*.ts`
+- [x] 4.3 Potwierdzenie, że `npm run lint` z roota obejmuje `packages/code-reviewer/**/*.ts` — 21f4fcf
 
 ### Faza 5: Evale promptfoo
 
 #### Automatyczne
 
-- [ ] 5.1 `npm run eval --prefix packages/code-reviewer` uruchamia się bez błędów konfiguracji
+- [x] 5.1 `npm run eval --prefix packages/code-reviewer` uruchamia się bez błędów konfiguracji
 
 #### Ręczne
 
-- [ ] 5.2 Przegląd macierzy wyników — model domyślny łapie `verdict === "fail"` na fixture z wadami
+- [x] 5.2 Przegląd macierzy wyników — model domyślny łapie `verdict === "fail"` na fixture z wadami
 
 ### Faza 6: Dokumentacja i weryfikacja end-to-end
 

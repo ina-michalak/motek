@@ -1,0 +1,90 @@
+diff --git a/supabase/migrations/20260912120000_create_yarn_notifications_table.sql b/supabase/migrations/20260912120000_create_yarn_notifications_table.sql
+new file mode 100644
+index 0000000..a1b2c3d
+--- /dev/null
++++ b/supabase/migrations/20260912120000_create_yarn_notifications_table.sql
+@@ -0,0 +1,15 @@
++-- Low-stock notifications: alert users when a yarn's remaining quantity crosses a threshold
++
++create table yarn_notifications (
++  id uuid primary key default gen_random_uuid(),
++  user_id uuid not null references auth.users (id) on delete cascade,
++  yarn_id uuid not null references yarns (id) on delete cascade,
++  message text not null,
++  read boolean not null default false,
++
++  created_at timestamptz not null default now()
++);
++
++create index yarn_notifications_user_idx on yarn_notifications (user_id);
++
++grant select, insert, update, delete on yarn_notifications to authenticated;
+diff --git a/src/pages/api/yarns/[id]/notify.ts b/src/pages/api/yarns/[id]/notify.ts
+new file mode 100644
+index 0000000..d4e5f6a
+--- /dev/null
++++ b/src/pages/api/yarns/[id]/notify.ts
+@@ -0,0 +1,22 @@
++import type { APIRoute } from "astro";
++import { createClient } from "@/lib/supabase";
++
++export const POST: APIRoute = async (context) => {
++  if (!context.locals.user) {
++    return Response.json({ error: "Unauthorized" }, { status: 401 });
++  }
++
++  const supabase = createClient(context.request.headers, context.cookies);
++  if (!supabase) {
++    return Response.json({ error: "Supabase is not configured" }, { status: 400 });
++  }
++
++  const body = await context.request.json();
++
++  const { error } = await supabase.from("yarn_notifications").insert({
++    user_id: context.locals.user.id,
++    yarn_id: context.params.id,
++    message: body.message,
++  });
++
++  if (error) {
++    return Response.json({ error: error.message }, { status: 400 });
++  }
++
++  return Response.json({ ok: true }, { status: 200 });
++};
+diff --git a/src/components/yarns/LowStockBanner.tsx b/src/components/yarns/LowStockBanner.tsx
+new file mode 100644
+index 0000000..b7c8d9e
+--- /dev/null
++++ b/src/components/yarns/LowStockBanner.tsx
+@@ -0,0 +1,28 @@
++import { useEffect, useState } from "react";
++import { createBrowserClient } from "@/lib/supabase-browser";
++
++interface LowStockBannerProps {
++  userId: string;
++}
++
++export function LowStockBanner({ userId }: LowStockBannerProps) {
++  const [count, setCount] = useState(0);
++
++  useEffect(() => {
++    const supabase = createBrowserClient();
++    const channel = supabase
++      .channel(`yarn-notifications-${userId}`)
++      .on("postgres_changes", { event: "INSERT", schema: "public", table: "yarn_notifications" }, () => {
++        setCount((current) => current + 1);
++      })
++      .subscribe();
++  }, [userId]);
++
++  if (count === 0) {
++    return null;
++  }
++
++  return (
++    <div className="rounded-md bg-amber-100 px-4 py-2 text-sm text-amber-900">
++      Masz {count} nowych powiadomień o niskim stanie włóczki.
++    </div>
++  );
++}
