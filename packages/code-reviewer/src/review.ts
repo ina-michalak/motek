@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { generateText, Output } from "ai";
 import { z } from "zod";
-import { buildPrompt, truncateDiff } from "./prompt";
+import { buildPrompt } from "./prompt";
 import { formatComment } from "./format-comment";
 import { REVIEW_SCHEMA, type Review } from "./schema";
 import { computeVerdict } from "./verdict";
@@ -17,11 +17,11 @@ export async function runReview(input: {
   model: string;
 }): Promise<{ review: Review; verdict: "pass" | "fail"; comment: string }> {
   const openrouter = createOpenRouter({ apiKey: input.apiKey });
-  const { diff, truncated } = truncateDiff(input.diff);
+  const { prompt, truncated } = buildPrompt({ title: input.title, body: input.body, diff: input.diff });
   const { output } = await generateText({
     model: openrouter(input.model),
     output: Output.object({ schema: REVIEW_SCHEMA }),
-    prompt: buildPrompt({ title: input.title, body: input.body, diff }),
+    prompt,
   });
   const parsed = REVIEW_SCHEMA.safeParse(output);
   if (!parsed.success) {
@@ -64,7 +64,9 @@ export async function main(): Promise<void> {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   main().catch((error: unknown) => {
-    console.error(error);
+    // Loguj tylko komunikat, nie cały obiekt błędu — APICallError potrafi przechowywać
+    // pełną treść promptu (diff PR-a) w requestBodyValues/responseBody.
+    console.error(error instanceof Error ? error.message : String(error));
     process.exitCode = 1;
   });
 }

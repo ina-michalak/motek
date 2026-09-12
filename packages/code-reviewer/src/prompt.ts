@@ -9,7 +9,10 @@ export function truncateDiff(diff: string): { diff: string; truncated: boolean }
   return { diff: diff.slice(0, MAX_DIFF_CHARS), truncated: true };
 }
 
-export function buildPrompt({ title, body, diff }: { title: string; body: string; diff: string }): string {
+export function buildPrompt({ title, body, diff }: { title: string; body: string; diff: string }): {
+  prompt: string;
+  truncated: boolean;
+} {
   const { diff: truncatedDiff, truncated } = truncateDiff(diff);
 
   const criteriaList = CRITERIA.map((c, i) => `${i + 1}) **${c.label}**\n${c.definition}`).join("\n\n");
@@ -18,7 +21,7 @@ export function buildPrompt({ title, body, diff }: { title: string; body: string
     ? `\n\n> Uwaga: diff został obcięty do ${MAX_DIFF_CHARS} znaków przed oceną — może nie zawierać pełnego kontekstu zmiany.`
     : "";
 
-  return `Jesteś recenzentem PR-a w projekcie Astro SSR (React 19, Tailwind 4, Supabase, shadcn/ui). Oceń poniższą zmianę wyłącznie na podstawie tytułu, opisu i diffa — bez dostępu do szerszego kontekstu repo. Dla każdego z poniższych 7 kryteriów wystaw ocenę w skali 1-10 (1 = najgorszy, 10 = najlepszy) oraz krótkie uzasadnienie po polsku (1-2 zdania).
+  const prompt = `Jesteś recenzentem PR-a w projekcie Astro SSR (React 19, Tailwind 4, Supabase, shadcn/ui). Oceń poniższą zmianę wyłącznie na podstawie tytułu, opisu i diffa — bez dostępu do szerszego kontekstu repo. Dla każdego z poniższych 7 kryteriów wystaw ocenę w skali 1-10 (1 = najgorszy, 10 = najlepszy) oraz krótkie uzasadnienie po polsku (1-2 zdania).
 
 ## Kryteria oceny
 
@@ -35,4 +38,6 @@ ${body}
 ## Diff
 
 ${truncatedDiff}${truncationNote}`;
+
+  return { prompt, truncated };
 }

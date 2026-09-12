@@ -68,4 +68,19 @@ describe("runReview", () => {
       }),
     ).rejects.toThrow("Niepoprawny structured output");
   });
+
+  it("propagates the error when the LLM call itself fails (network/timeout/5xx)", async () => {
+    const { runReview } = await import("./review");
+    generateTextMock.mockRejectedValueOnce(new Error("OpenRouter request failed with status 503"));
+
+    await expect(
+      runReview({
+        title: "t",
+        body: "b",
+        diff: "d",
+        apiKey: "key",
+        model: "openai/gpt-4o-mini",
+      }),
+    ).rejects.toThrow("OpenRouter request failed with status 503");
+  });
 });

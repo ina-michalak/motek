@@ -17,6 +17,7 @@ inputs:
   openrouter-model:
     description: "Override modelu OpenRouter (domyślnie openai/gpt-4o-mini)."
     required: false
+    default: "openai/gpt-4o-mini"
 
 outputs:
   verdict:

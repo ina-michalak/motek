@@ -31,10 +31,11 @@ jobs:
         id: pr-data
         run: |
           TITLE=$(gh pr view "$PR_NUMBER" --json title --jq .title)
+          DELIM="TITLE_EOF_$(uuidgen)"
           {
-            echo "title<<GH_OUTPUT_TITLE_EOF"
+            echo "title<<$DELIM"
             echo "$TITLE"
-            echo "GH_OUTPUT_TITLE_EOF"
+            echo "$DELIM"
           } >> "$GITHUB_OUTPUT"
           gh pr view "$PR_NUMBER" --json body --jq .body > pr-body.txt
           gh pr diff "$PR_NUMBER" > pr-diff.txt
@@ -52,20 +53,25 @@ jobs:
           openrouter-api-key: ${{ secrets.OPENROUTER_API_KEY }}
           openrouter-model: ${{ vars.OPENROUTER_MODEL || 'openai/gpt-4o-mini' }}
 
-      - name: Usuń poprzedni komentarz recenzji
-        run: |
-          COMMENT_ID=$(gh api "repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" --paginate \
-            --jq '.[] | select(.body | startswith("<!-- ai-cr:review-comment -->")) | .id' | tail -1)
-          if [ -n "$COMMENT_ID" ]; then
-            gh api --method DELETE "repos/${{ github.repository }}/issues/comments/${COMMENT_ID}" || true
-          fi
-
       - name: Opublikuj komentarz recenzji
+        id: post-comment
         env:
           COMMENT_BODY: ${{ steps.review.outputs.comment-body }}
         run: |
           printf '%s\n' "$COMMENT_BODY" > review-comment.md
-          gh pr comment "$PR_NUMBER" --body-file review-comment.md
+          NEW_ID=$(gh api --method POST "repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" \
+            -f body=@review-comment.md --jq .id)
+          echo "comment-id=$NEW_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Usuń poprzednie komentarze recenzji
+        env:
+          NEW_COMMENT_ID: ${{ steps.post-comment.outputs.comment-id }}
+        run: |
+          gh api "repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" --paginate \
+            --jq '.[] | select(.body | startswith("<!-- ai-cr:review-comment -->")) | select(.id != '"$NEW_COMMENT_ID"') | .id' \
+          | while read -r OLD_ID; do
+              gh api --method DELETE "repos/${{ github.repository }}/issues/comments/${OLD_ID}" || true
+            done
 
       - name: Ustaw etykietę werdyktu
         env:

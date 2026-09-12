@@ -6,7 +6,7 @@
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "review": "tsx src/review.ts",
+    "review": "tsx --env-file=.env src/review.ts",
     "eval": "promptfoo eval -c evals/promptfooconfig.yaml"
   },
   "dependencies": {
