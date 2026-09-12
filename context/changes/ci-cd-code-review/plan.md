@@ -386,23 +386,23 @@ Domykamy zmianę: dokumentacja, sekrety/etykiety w repo, realny testowy PR, revi
 
 #### Automatyczne
 
-- [x] 2.1 `npm test --prefix packages/code-reviewer` przechodzi (z `review.test.ts`)
-- [x] 2.2 `npm run typecheck --prefix packages/code-reviewer` przechodzi
+- [x] 2.1 `npm test --prefix packages/code-reviewer` przechodzi (z `review.test.ts`) — a3db9e5
+- [x] 2.2 `npm run typecheck --prefix packages/code-reviewer` przechodzi — a3db9e5
 
 #### Ręczne
 
-- [x] 2.3 Lokalne uruchomienie z prawdziwym kluczem OpenRouter na mini-diffie
+- [x] 2.3 Lokalne uruchomienie z prawdziwym kluczem OpenRouter na mini-diffie — a3db9e5
 
 ### Faza 3: Composite Action + workflow GHA
 
 #### Automatyczne
 
-- [ ] 3.1 Walidacja YAML `code-review.yml` i `action.yml` bez błędów składniowych
-- [ ] 3.2 Brak kolizji z istniejącym `ci.yml`
+- [x] 3.1 Walidacja YAML `code-review.yml` i `action.yml` bez błędów składniowych
+- [x] 3.2 Brak kolizji z istniejącym `ci.yml`
 
 #### Ręczne
 
-- [ ] 3.3 Przegląd wszystkich 5 punktów z Kroku 4 setup-promptu (fork-guard, label-gate, czyszczenie etykiety, heredoc tytułu, `|| true`)
+- [x] 3.3 Przegląd wszystkich 5 punktów z Kroku 4 setup-promptu (fork-guard, label-gate, czyszczenie etykiety, heredoc tytułu, `|| true`)
 
 ### Faza 4: Wpięcie jakości pakietu do istniejącego CI
 
