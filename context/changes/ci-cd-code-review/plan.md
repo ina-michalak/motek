@@ -374,24 +374,24 @@ Domykamy zmianę: dokumentacja, sekrety/etykiety w repo, realny testowy PR, revi
 
 #### Automatyczne
 
-- [x] 1.1 `npm test --prefix packages/code-reviewer` przechodzi
-- [x] 1.2 `npm run typecheck --prefix packages/code-reviewer` przechodzi
-- [x] 1.3 `npx eslint packages/code-reviewer` bez błędów type-aware
+- [x] 1.1 `npm test --prefix packages/code-reviewer` przechodzi — a1d0930
+- [x] 1.2 `npm run typecheck --prefix packages/code-reviewer` przechodzi — a1d0930
+- [x] 1.3 `npx eslint packages/code-reviewer` bez błędów type-aware — a1d0930
 
 #### Ręczne
 
-- [x] 1.4 Ręczny przegląd treści `criteria.ts`
+- [x] 1.4 Ręczny przegląd treści `criteria.ts` — a1d0930
 
 ### Faza 2: Orkiestracja recenzji (`review.ts`)
 
 #### Automatyczne
 
-- [ ] 2.1 `npm test --prefix packages/code-reviewer` przechodzi (z `review.test.ts`)
-- [ ] 2.2 `npm run typecheck --prefix packages/code-reviewer` przechodzi
+- [x] 2.1 `npm test --prefix packages/code-reviewer` przechodzi (z `review.test.ts`)
+- [x] 2.2 `npm run typecheck --prefix packages/code-reviewer` przechodzi
 
 #### Ręczne
 
-- [ ] 2.3 Lokalne uruchomienie z prawdziwym kluczem OpenRouter na mini-diffie
+- [x] 2.3 Lokalne uruchomienie z prawdziwym kluczem OpenRouter na mini-diffie
 
 ### Faza 3: Composite Action + workflow GHA
 
