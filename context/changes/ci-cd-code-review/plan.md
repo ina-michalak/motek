@@ -397,23 +397,23 @@ Domykamy zmianę: dokumentacja, sekrety/etykiety w repo, realny testowy PR, revi
 
 #### Automatyczne
 
-- [x] 3.1 Walidacja YAML `code-review.yml` i `action.yml` bez błędów składniowych
-- [x] 3.2 Brak kolizji z istniejącym `ci.yml`
+- [x] 3.1 Walidacja YAML `code-review.yml` i `action.yml` bez błędów składniowych — eecc4c8
+- [x] 3.2 Brak kolizji z istniejącym `ci.yml` — eecc4c8
 
 #### Ręczne
 
-- [x] 3.3 Przegląd wszystkich 5 punktów z Kroku 4 setup-promptu (fork-guard, label-gate, czyszczenie etykiety, heredoc tytułu, `|| true`)
+- [x] 3.3 Przegląd wszystkich 5 punktów z Kroku 4 setup-promptu (fork-guard, label-gate, czyszczenie etykiety, heredoc tytułu, `|| true`) — eecc4c8
 
 ### Faza 4: Wpięcie jakości pakietu do istniejącego CI
 
 #### Automatyczne
 
-- [ ] 4.1 Zmieniony `ci.yml` przechodzi walidację YAML
-- [ ] 4.2 Nowe kroki (`npm ci`/`typecheck`/`test --prefix`) wykonują się i przechodzą w Actions
+- [x] 4.1 Zmieniony `ci.yml` przechodzi walidację YAML
+- [x] 4.2 Nowe kroki (`npm ci`/`typecheck`/`test --prefix`) wykonują się i przechodzą w Actions
 
 #### Ręczne
 
-- [ ] 4.3 Potwierdzenie, że `npm run lint` z roota obejmuje `packages/code-reviewer/**/*.ts`
+- [x] 4.3 Potwierdzenie, że `npm run lint` z roota obejmuje `packages/code-reviewer/**/*.ts`
 
 ### Faza 5: Evale promptfoo
 
