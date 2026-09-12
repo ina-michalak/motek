@@ -168,7 +168,15 @@ Set `SUPABASE_URL` and `SUPABASE_KEY` as secrets in your Cloudflare dashboard or
 
 ## CI
 
-GitHub Actions runs lint + build on every push and PR to `master`. Configure `SUPABASE_URL` and `SUPABASE_KEY` as repository secrets in GitHub for the build step.
+GitHub Actions runs lint + build on every push and PR to `main`. Configure `SUPABASE_URL` and `SUPABASE_KEY` as repository secrets in GitHub for the build step.
+
+### AI code review
+
+Every PR opened, reopened, or labeled `ai-cr:review` against `main` gets an automated review from `packages/code-reviewer/` — a standalone agent that scores the diff against 7 criteria and posts a comment plus a `ai-cr:passed`/`ai-cr:failed` label.
+
+- **Retry**: add the `ai-cr:review` label to a PR to re-run the review — it removes the previous comment/label and posts fresh ones.
+- **Run locally**: from the repo root, `npm run review --prefix packages/code-reviewer` (single review) or `npm run eval --prefix packages/code-reviewer` (promptfoo model/prompt comparison). Both need `OPENROUTER_API_KEY` — copy `packages/code-reviewer/.env.example` to `packages/code-reviewer/.env` and fill it in.
+- Requires `OPENROUTER_API_KEY` (and optionally `OPENROUTER_MODEL`) configured as repository secrets/variables in GitHub for the workflow to run.
 
 ## License
 
