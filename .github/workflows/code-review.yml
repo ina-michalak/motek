@@ -60,7 +60,7 @@ jobs:
         run: |
           printf '%s\n' "$COMMENT_BODY" > review-comment.md
           NEW_ID=$(gh api --method POST "repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" \
-            -f body=@review-comment.md --jq .id)
+            -F body=@review-comment.md --jq .id)
           echo "comment-id=$NEW_ID" >> "$GITHUB_OUTPUT"
 
       - name: Usuń poprzednie komentarze recenzji
