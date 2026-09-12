@@ -1,0 +1,24 @@
+{
+  "name": "code-reviewer",
+  "type": "module",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "review": "tsx --env-file=.env src/review.ts",
+    "eval": "promptfoo eval -c evals/promptfooconfig.yaml"
+  },
+  "dependencies": {
+    "@openrouter/ai-sdk-provider": "2.9.1",
+    "ai": "6.0.282",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "promptfoo": "^0.123.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

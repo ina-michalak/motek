@@ -1,0 +1,95 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, reopened, labeled]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ai-cr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  code-review:
+    # Fork-guard: PR z forka nie ma dostępu do sekretu OPENROUTER_API_KEY.
+    # Label-gate: na evencie `labeled` odpalamy tylko dla etykiety ai-cr:review (retry).
+    if: |
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (github.event.action != 'labeled' || github.event.label.name == 'ai-cr:review')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pobierz dane pull requesta
+        id: pr-data
+        run: |
+          TITLE=$(gh pr view "$PR_NUMBER" --json title --jq .title)
+          DELIM="TITLE_EOF_$(uuidgen)"
+          {
+            echo "title<<$DELIM"
+            echo "$TITLE"
+            echo "$DELIM"
+          } >> "$GITHUB_OUTPUT"
+          gh pr view "$PR_NUMBER" --json body --jq .body > pr-body.txt
+          gh pr diff "$PR_NUMBER" > pr-diff.txt
+
+      - name: Wyczyść etykietę ai-cr:review
+        run: gh pr edit "$PR_NUMBER" --remove-label "ai-cr:review" || true
+
+      - name: Uruchom AI code review
+        id: review
+        uses: ./.github/actions/code-review
+        with:
+          pr-title: ${{ steps.pr-data.outputs.title }}
+          pr-body-file: ${{ github.workspace }}/pr-body.txt
+          pr-diff-file: ${{ github.workspace }}/pr-diff.txt
+          openrouter-api-key: ${{ secrets.OPENROUTER_API_KEY }}
+          openrouter-model: ${{ vars.OPENROUTER_MODEL || 'openai/gpt-4o-mini' }}
+
+      - name: Opublikuj komentarz recenzji
+        id: post-comment
+        env:
+          COMMENT_BODY: ${{ steps.review.outputs.comment-body }}
+        run: |
+          printf '%s\n' "$COMMENT_BODY" > review-comment.md
+          NEW_ID=$(gh api --method POST "repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" \
+            -F body=@review-comment.md --jq .id)
+          echo "comment-id=$NEW_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Usuń poprzednie komentarze recenzji
+        env:
+          NEW_COMMENT_ID: ${{ steps.post-comment.outputs.comment-id }}
+        run: |
+          gh api "repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" --paginate \
+            --jq '.[] | select(.body | startswith("<!-- ai-cr:review-comment -->")) | select(.id != '"$NEW_COMMENT_ID"') | .id' \
+          | while read -r OLD_ID; do
+              gh api --method DELETE "repos/${{ github.repository }}/issues/comments/${OLD_ID}" || true
+            done
+
+      - name: Ustaw etykietę werdyktu
+        env:
+          VERDICT: ${{ steps.review.outputs.verdict }}
+        run: |
+          if [ "$VERDICT" = "pass" ]; then
+            NEW_LABEL="ai-cr:passed"
+            OLD_LABEL="ai-cr:failed"
+          else
+            NEW_LABEL="ai-cr:failed"
+            OLD_LABEL="ai-cr:passed"
+          fi
+          gh pr edit "$PR_NUMBER" --remove-label "$OLD_LABEL" || true
+          gh pr edit "$PR_NUMBER" --add-label "$NEW_LABEL"
+
+      - name: Zgłoś błąd recenzji
+        if: failure()
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh pr comment "$PR_NUMBER" --body "⚠️ Recenzja AI nie powiodła się. Sprawdź logi: ${RUN_URL}" || true
