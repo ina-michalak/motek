@@ -429,11 +429,11 @@ Domykamy zmianę: dokumentacja, sekrety/etykiety w repo, realny testowy PR, revi
 
 #### Automatyczne
 
-- [x] 6.1 `npm run lint` i `npm run build` w roocie nadal przechodzą
+- [x] 6.1 `npm run lint` i `npm run build` w roocie nadal przechodzą — 1c7bafd
 
 #### Ręczne
 
-- [x] 6.2 Sekret `OPENROUTER_API_KEY` i zmienna `OPENROUTER_MODEL` dodane w GitHub
-- [x] 6.3 Etykiety `ai-cr:review`/`ai-cr:passed`/`ai-cr:failed` utworzone
-- [x] 6.4 Testowy PR potwierdza pełną pętlę (komentarz, etykieta, retry)
-- [ ] 6.5 `/10x-impl-review` uruchomiony, `/10x-archive` na końcu
+- [x] 6.2 Sekret `OPENROUTER_API_KEY` i zmienna `OPENROUTER_MODEL` dodane w GitHub — 1c7bafd
+- [x] 6.3 Etykiety `ai-cr:review`/`ai-cr:passed`/`ai-cr:failed` utworzone — 1c7bafd
+- [x] 6.4 Testowy PR potwierdza pełną pętlę (komentarz, etykieta, retry) — 1c7bafd
+- [x] 6.5 `/10x-impl-review` uruchomiony, `/10x-archive` na końcu — d2a05e9
