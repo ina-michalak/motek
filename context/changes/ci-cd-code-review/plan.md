@@ -419,21 +419,21 @@ Domykamy zmianę: dokumentacja, sekrety/etykiety w repo, realny testowy PR, revi
 
 #### Automatyczne
 
-- [x] 5.1 `npm run eval --prefix packages/code-reviewer` uruchamia się bez błędów konfiguracji
+- [x] 5.1 `npm run eval --prefix packages/code-reviewer` uruchamia się bez błędów konfiguracji — 53c2f72
 
 #### Ręczne
 
-- [x] 5.2 Przegląd macierzy wyników — model domyślny łapie `verdict === "fail"` na fixture z wadami
+- [x] 5.2 Przegląd macierzy wyników — model domyślny łapie `verdict === "fail"` na fixture z wadami — 53c2f72
 
 ### Faza 6: Dokumentacja i weryfikacja end-to-end
 
 #### Automatyczne
 
-- [ ] 6.1 `npm run lint` i `npm run build` w roocie nadal przechodzą
+- [x] 6.1 `npm run lint` i `npm run build` w roocie nadal przechodzą
 
 #### Ręczne
 
-- [ ] 6.2 Sekret `OPENROUTER_API_KEY` i zmienna `OPENROUTER_MODEL` dodane w GitHub
-- [ ] 6.3 Etykiety `ai-cr:review`/`ai-cr:passed`/`ai-cr:failed` utworzone
-- [ ] 6.4 Testowy PR potwierdza pełną pętlę (komentarz, etykieta, retry)
+- [x] 6.2 Sekret `OPENROUTER_API_KEY` i zmienna `OPENROUTER_MODEL` dodane w GitHub
+- [x] 6.3 Etykiety `ai-cr:review`/`ai-cr:passed`/`ai-cr:failed` utworzone
+- [x] 6.4 Testowy PR potwierdza pełną pętlę (komentarz, etykieta, retry)
 - [ ] 6.5 `/10x-impl-review` uruchomiony, `/10x-archive` na końcu
