@@ -40,8 +40,8 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{"email":"e2e-test@example.com","password":"TestPassword123","email_confirm":true}')
           cat /tmp/create-user.json
-          # 201 = created, 422 email_exists = already provisioned (e.g. reused runner) — both fine.
-          if [ "$HTTP_CODE" != "201" ] && ! grep -q email_exists /tmp/create-user.json; then
+          # 200/201 = created, 422 email_exists = already provisioned (e.g. reused runner) — all fine.
+          if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "201" ] && ! grep -q email_exists /tmp/create-user.json; then
             echo "Failed to create e2e test account (HTTP $HTTP_CODE)" >&2
             exit 1
           fi
