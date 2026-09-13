@@ -13,20 +13,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-- `npm run dev` — start dev server (Cloudflare workerd runtime)
-- `npm run build` — production build (SSR via `@astrojs/cloudflare`)
+- `npm run dev` — start dev server
+- `npm run dev:test` — start dev server in `test` mode (loads `.env.test`, used by e2e tests)
+- `npm run build` — production build (SSR via `@astrojs/vercel`)
 - `npm run preview` — preview production build
 - `npm run lint` — ESLint with type-checked rules
 - `npm run lint:fix` — auto-fix lint issues
 - `npm run format` — Prettier (includes prettier-plugin-astro + prettier-plugin-tailwindcss)
+- `npm run typecheck` — `astro check`
+- `npm run test` — unit + integration tests (Vitest)
+- `npm run test:e2e` — e2e tests (Playwright)
 
 Pre-commit hooks: husky + lint-staged runs `eslint --fix` on `*.{ts,tsx,astro}` and `prettier --write` on `*.{json,css,md}`.
 
-No test runner is configured yet (no test script in `package.json`).
-
 ## Architecture
 
-**Astro 6 SSR app** with React 19 islands, Tailwind 4, Supabase auth, and shadcn/ui components. Deployed to Cloudflare Workers.
+**Astro 6 SSR app** with React 19 islands, Tailwind 4, Supabase auth, and shadcn/ui components. Deployed to Vercel.
 
 ### Rendering mode
 
@@ -55,10 +57,9 @@ Full server-side rendering (`output: "server"` in astro.config.mjs). All pages a
 ### Environment
 
 - Node.js v22.14.0 (see `.nvmrc`)
-- Env vars: `SUPABASE_URL`, `SUPABASE_KEY` (copy `.env.example` to `.env` for Node, or `.dev.vars` for Cloudflare local dev)
+- Env vars: `SUPABASE_URL`, `SUPABASE_KEY`, optional `SENTRY_DSN` (copy `.env.example` to `.env`; gitignored)
 - Local Supabase: `npx supabase start` (requires Docker)
-- Cloudflare local dev: secrets go in `.dev.vars` (gitignored)
-- Deploy: `npx wrangler deploy` (requires Cloudflare account + `wrangler` auth)
+- Deploy: push to `main` (production) or any other branch (preview) — the Vercel GitHub integration deploys automatically. Manual deploy: `npx vercel --prod`.
 
 ## CI
 

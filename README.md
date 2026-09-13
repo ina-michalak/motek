@@ -1,183 +1,155 @@
-# 10x Astro Starter
+# Motek
 
-![](./public/template.png)
+Motek to aplikacja webowa dla robiących na drutach i szydełku, którzy mają średni-duży zapas włóczki (30+ motków) i nie mają wygodnego sposobu na jego przeszukiwanie. Motek to osobista, prywatna biblioteka włóczki: dodajesz to, co masz w zapasie (nazwa, producent, ilość, kolor, skład, dobrane druty/szydełko, ocena, zdjęcie), przeglądasz i filtrujesz swoją kolekcję, a przy każdej włóczce dostajesz sugestie zamienników wyliczone na podstawie parametrów technicznych innych włóczek z Twojej własnej biblioteki — nigdy z zewnętrznej bazy czy od innych użytkowników.
 
-A modern, opinionated starter template for building fast, accessible web applications.
+Pełna specyfikacja produktowa: [context/foundation/prd.md](context/foundation/prd.md).
 
-## Tech Stack
+## Stos technologiczny
 
-- [Astro](https://astro.build/) v6 - Modern web framework with server-first rendering
-- [React](https://react.dev/) v19 - UI library for interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4 - Utility-first CSS framework
-- [Supabase](https://supabase.com/) - Authentication and backend-as-a-service
-- [Cloudflare Workers](https://workers.cloudflare.com/) - Edge deployment runtime
+- [Astro](https://astro.build/) v6 — pełne SSR (`output: "server"`)
+- [React](https://react.dev/) v19 — interaktywne komponenty (wyspy)
+- [TypeScript](https://www.typescriptlang.org/) v5
+- [Tailwind CSS](https://tailwindcss.com/) v4
+- [Supabase](https://supabase.com/) — uwierzytelnianie, baza (Postgres + RLS) i storage na zdjęcia włóczki
+- [Vercel](https://vercel.com/) — adapter `@astrojs/vercel`, hosting/wdrożenie
+- [Sentry](https://sentry.io/) — monitoring błędów (klient + serwer)
+- [shadcn/ui](https://ui.shadcn.com/) (styl "new-york") — komponenty UI w `src/components/ui/`
 
-## Prerequisites
+## Wymagania
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+- Node.js v22.14.0 (patrz `.nvmrc`)
+- npm
+- [Docker](https://www.docker.com/) — tylko jeśli używasz lokalnego Supabase (~7 GB RAM)
 
-## Getting Started
+## Szybki start
 
-1. Clone the repository:
-
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
-
-2. Install dependencies:
+1. Sklonuj repozytorium i zainstaluj zależności:
 
 ```bash
 npm install
 ```
 
-3. Set up Supabase and configure environment variables — see [Supabase Configuration](#supabase-configuration) below.
+2. Skonfiguruj Supabase — patrz sekcja [Konfiguracja Supabase](#konfiguracja-supabase) poniżej.
 
-4. Create a `.dev.vars` file for local Cloudflare dev secrets:
-
-```bash
-cp .env.example .dev.vars
-```
-
-5. Run the development server:
-
-```bash
-npm run dev
-```
-
-## Available Scripts
-
-- `npm run dev` - Start development server (Cloudflare workerd runtime)
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint with type-checked rules
-- `npm run lint:fix` - Auto-fix ESLint issues
-- `npm run format` - Run Prettier
-
-## Project Structure
-
-```md
-.
-├── src/
-│ ├── layouts/ # Astro layouts
-│ ├── pages/ # Astro pages
-│ │ └── api/ # API endpoints
-│ ├── components/ # UI components (Astro & React)
-│ └── assets/ # Static assets
-├── public/ # Public assets
-├── wrangler.jsonc # Cloudflare Workers config
-```
-
-## Supabase Configuration
-
-This project uses [Supabase](https://supabase.com/) for authentication. Environment variables are declared via Astro's `astro:env` schema and are treated as **server-only secrets** — they are never exposed to the client.
-
-### First-time setup (local, no cloud project needed)
-
-Requires [Docker](https://www.docker.com/) and ~7 GB RAM.
-
-1. Create your `.env` file:
+3. Utwórz plik `.env` na podstawie `.env.example` i wypełnij zmienne (`SUPABASE_URL`, `SUPABASE_KEY`, opcjonalnie `SENTRY_DSN`):
 
 ```bash
 cp .env.example .env
 ```
 
-2. Initialize the local Supabase project (creates a `supabase/` config folder):
+4. Uruchom serwer dev:
 
 ```bash
-npx supabase init
+npm run dev
 ```
 
-3. Start the local stack (downloads Docker images on first run):
+## Skrypty npm
 
-```bash
-npx supabase start
-```
+| Skrypt              | Opis                                                               |
+| ------------------- | ------------------------------------------------------------------ |
+| `npm run dev`       | Serwer dev (`.env`)                                                |
+| `npm run dev:test`  | Serwer dev w trybie `test` (`.env.test`) — używany przez testy e2e |
+| `npm run build`     | Build produkcyjny                                                  |
+| `npm run preview`   | Podgląd builda produkcyjnego                                       |
+| `npm run lint`      | ESLint (reguły z type-checkingiem)                                 |
+| `npm run lint:fix`  | ESLint z automatycznymi poprawkami                                 |
+| `npm run format`    | Prettier (`prettier-plugin-astro`, `prettier-plugin-tailwindcss`)  |
+| `npm run typecheck` | `astro check`                                                      |
+| `npm run test`      | Testy jednostkowe i integracyjne (Vitest)                          |
+| `npm run test:e2e`  | Testy e2e (Playwright)                                             |
 
-4. Copy the credentials printed by the CLI into your `.env` and `.dev.vars`:
+Pre-commit hooki (husky + lint-staged) uruchamiają `eslint --fix` na `*.{ts,tsx,astro}` i `prettier --write` na `*.{json,css,md}`.
+
+## Konfiguracja Supabase
+
+Zmienne środowiskowe są deklarowane przez schemat `astro:env` (`astro.config.mjs`) i traktowane jako **sekrety tylko serwerowe** — nigdy nie trafiają do klienta.
+
+### Lokalnie (bez zdalnego projektu)
+
+Wymaga Dockera.
+
+1. `cp .env.example .env`
+2. `npx supabase init` (tworzy folder `supabase/` — w tym repo już istnieje wraz z migracjami)
+3. `npx supabase start` (przy pierwszym uruchomieniu ściągnie obrazy Dockera i zaaplikuje migracje z `supabase/migrations/`)
+4. Skopiuj dane wypisane przez CLI do `.env`:
 
 ```
 SUPABASE_URL=http://127.0.0.1:54321
-SUPABASE_KEY=<anon key from CLI output>
+SUPABASE_KEY=<anon key z wyjścia CLI>
 ```
 
-5. To stop the stack when done:
+5. Zatrzymanie stosu: `npx supabase stop`
 
-```bash
-npx supabase stop
-```
+Lokalny Studio UI jest dostępny na `http://localhost:54323`.
 
-The local Studio UI is available at `http://localhost:54323`.
-
-No database tables or migrations are required — this project uses Supabase Auth's built-in `auth.users` table only.
-
-### Using a cloud Supabase project instead
-
-If you prefer to use a hosted Supabase project, add these variables to your `.env` and `.dev.vars` files:
-
-| Variable       | Description                                                |
-| -------------- | ---------------------------------------------------------- |
-| `SUPABASE_URL` | Project URL from Supabase dashboard → Settings → API       |
-| `SUPABASE_KEY` | `anon` public key from Supabase dashboard → Settings → API |
+### Ze zdalnym projektem Supabase
 
 ```
 SUPABASE_URL=https://<project-ref>.supabase.co
-SUPABASE_KEY=<anon-key>
+SUPABASE_KEY=<anon-key z dashboardu Supabase → Settings → API>
 ```
 
-### Email confirmation in local development
+### Potwierdzanie e-maila lokalnie
 
-By default Supabase requires email confirmation before a user can sign in. To skip this during local development:
+Domyślnie Supabase wymaga potwierdzenia e-maila przed logowaniem. W lokalnym dev można to wyłączyć: Supabase Studio → **Authentication → Email → Confirm email** → off.
 
-1. Open the Supabase dashboard for your project
-2. Go to **Authentication → Email → Confirm email**
-3. Toggle it **off**
+## Funkcjonalności (MVP)
 
-Users can then sign in immediately after sign-up without clicking a confirmation link.
+- **Konto i dostęp** — rejestracja/logowanie e-mail + hasło (Supabase Auth); `src/middleware.ts` chroni `/dashboard` i `/yarns` i przypisuje zalogowanego użytkownika do `context.locals.user`.
+- **Biblioteka włóczek** — dodawanie, przegląd, filtrowanie i sortowanie, edycja (w tym ustawienie ilości na 0 przy wyczerpaniu) oraz usuwanie własnych włóczek, ze zdjęciem opcjonalnie zapisywanym w Supabase Storage. Każda operacja działa wyłącznie na włóczkach należących do zalogowanego użytkownika — wymuszone jednocześnie przez RLS w Postgresie i filtrowanie po `user_id` w warstwie serwisów.
+- **Sugestie zamienników** — lokalny algorytm dopasowania (skład włókien, rozmiar drutów/szydełka, kolor) liczony wyłącznie na bazie własnej biblioteki użytkownika, bez wywołań do zewnętrznego dostawcy AI. Sugestię można trwale zaakceptować lub odrzucić.
 
-### Auth routes
+### Trasy auth
 
-| Route                 | Description                                                             |
-| --------------------- | ----------------------------------------------------------------------- |
-| `/auth/signin`        | Email/password sign-in form                                             |
-| `/auth/signup`        | Email/password sign-up form                                             |
-| `/auth/confirm-email` | Post-signup "check your inbox" page                                     |
-| `/dashboard`          | Example protected page (redirects to `/auth/signin` if unauthenticated) |
+| Trasa                 | Opis                                                                                         |
+| --------------------- | -------------------------------------------------------------------------------------------- |
+| `/auth/signin`        | Formularz logowania e-mail/hasło                                                             |
+| `/auth/signup`        | Formularz rejestracji                                                                        |
+| `/auth/confirm-email` | Strona "sprawdź skrzynkę" po rejestracji                                                     |
+| `/dashboard`          | Lista włóczek zalogowanego użytkownika (przekierowuje do `/auth/signin` dla niezalogowanych) |
+| `/yarns/new`          | Formularz dodania nowej włóczki                                                              |
+| `/yarns/[id]`         | Szczegóły włóczki, edycja, usuwanie, sugestie zamienników                                    |
 
-Route protection is handled in `src/middleware.ts`. Add paths to the `PROTECTED_ROUTES` array there to require authentication.
+## Testy
 
-## Deployment
+Strategia testów i mapa ryzyk: [context/foundation/test-plan.md](context/foundation/test-plan.md).
 
-This project deploys to [Cloudflare Workers](https://workers.cloudflare.com/).
+- **Jednostkowe/integracyjne (Vitest)** — `npm run test`. Testy integracyjne (`*.integration.test.ts`) uderzają w prawdziwego, uwierzytelnionego klienta Supabase (RLS aktywne) i wymagają uruchomionego lokalnego stosu: `npx supabase start`.
+- **E2e (Playwright)** — `npm run test:e2e`. Wymaga serwera dev w trybie testowym (`npm run dev:test`, ładuje `.env.test`) i zapisanej sesji w `playwright/.auth/user.json`. Szczegóły konwencji i konfiguracji konta testowego: [tests/e2e/CLAUDE.md](tests/e2e/CLAUDE.md).
 
-1. Build the project:
+## Wdrożenie
+
+Aplikacja jest wdrażana na [Vercel](https://vercel.com/) (adapter `@astrojs/vercel`, region `fra1` — patrz `vercel.json`). Repozytorium GitHub jest podłączone do projektu Vercel: push na `main` trafia na produkcję, inne branche jako preview. Zmienne środowiskowe (`SUPABASE_URL`, `SUPABASE_KEY`, `SENTRY_DSN`) są skonfigurowane w dashboardzie Vercela osobno dla Production/Preview/Development.
+
+Deploy manualny (rzadko potrzebny — zwykle robi to integracja Vercel + GitHub):
 
 ```bash
 npm run build
+npx vercel --prod
 ```
-
-2. Deploy with Wrangler:
-
-```bash
-npx wrangler deploy
-```
-
-Set `SUPABASE_URL` and `SUPABASE_KEY` as secrets in your Cloudflare dashboard or via `npx wrangler secret put`.
 
 ## CI
 
-GitHub Actions runs lint + build on every push and PR to `main`. Configure `SUPABASE_URL` and `SUPABASE_KEY` as repository secrets in GitHub for the build step.
+GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) uruchamia lint + build na każdy push/PR do `main`. Wymaga sekretów repo `SUPABASE_URL` i `SUPABASE_KEY` dla kroku builda.
 
-### AI code review
+### Automatyczny code review AI
 
-Every PR opened, reopened, or labeled `ai-cr:review` against `main` gets an automated review from `packages/code-reviewer/` — a standalone agent that scores the diff against 7 criteria and posts a comment plus a `ai-cr:passed`/`ai-cr:failed` label.
+Każdy PR otwarty, ponownie otwarty lub oznaczony etykietą `ai-cr:review` do `main` dostaje automatyczną recenzję z `packages/code-reviewer/` — samodzielnego agenta oceniającego diff wg 7 kryteriów, który dodaje komentarz oraz etykietę `ai-cr:passed`/`ai-cr:failed`.
 
-- **Retry**: add the `ai-cr:review` label to a PR to re-run the review — it removes the previous comment/label and posts fresh ones.
-- **Run locally**: from the repo root, `npm run review --prefix packages/code-reviewer` (single review) or `npm run eval --prefix packages/code-reviewer` (promptfoo model/prompt comparison). Both need `OPENROUTER_API_KEY` — copy `packages/code-reviewer/.env.example` to `packages/code-reviewer/.env` and fill it in.
-- Requires `OPENROUTER_API_KEY` (and optionally `OPENROUTER_MODEL`) configured as repository secrets/variables in GitHub for the workflow to run.
+- **Powtórzenie**: dodaj etykietę `ai-cr:review` do PR, żeby ponownie uruchomić recenzję — usuwa poprzedni komentarz/etykietę i dodaje nowe.
+- **Uruchomienie lokalne**: z korzenia repo `npm run review --prefix packages/code-reviewer` (jedna recenzja) lub `npm run eval --prefix packages/code-reviewer` (porównanie modeli/promptów przez promptfoo). Obie komendy wymagają `OPENROUTER_API_KEY` — skopiuj `packages/code-reviewer/.env.example` do `packages/code-reviewer/.env` i wypełnij.
+- Workflow wymaga `OPENROUTER_API_KEY` (opcjonalnie `OPENROUTER_MODEL`) jako sekretów/zmiennych repo w GitHub.
 
-## License
+## Dokumentacja projektu
+
+Pisemna podstawa projektu (wizja, person, wymagania funkcjonalne, roadmapa, wybór stosu, plan testów) żyje w `context/foundation/`:
+
+- [`prd.md`](context/foundation/prd.md) — pełna specyfikacja produktowa
+- [`roadmap.md`](context/foundation/roadmap.md) — sekwencja kamieni milowych
+- [`tech-stack.md`](context/foundation/tech-stack.md) — wybór stosu i uzasadnienie
+- [`test-plan.md`](context/foundation/test-plan.md) — mapa ryzyk i fazowe wdrożenie testów
+- [`infrastructure.md`](context/foundation/infrastructure.md) — wybór platformy wdrożeniowej
+
+## Licencja
 
 MIT
