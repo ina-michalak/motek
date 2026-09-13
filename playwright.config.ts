@@ -14,12 +14,20 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:4321",
     trace: "on-first-retry",
-    // Logged in once by hand via Playwright CLI and saved with
-    // `playwright-cli state-save playwright/.auth/user.json` — see
-    // tests/e2e/CLAUDE.md. Re-run that when the session expires.
-    storageState: "playwright/.auth/user.json",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    { name: "setup", testMatch: /.*\.setup\.ts/ },
+    {
+      name: "chromium",
+      use: {
+        ...devices["Desktop Chrome"],
+        // Produced by the "setup" project (tests/e2e/auth.setup.ts), which
+        // logs in via the real UI once per run — see tests/e2e/CLAUDE.md.
+        storageState: "playwright/.auth/user.json",
+      },
+      dependencies: ["setup"],
+    },
+  ],
   webServer: {
     command: "npm run dev:test",
     url: "http://localhost:4321",

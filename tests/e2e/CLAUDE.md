@@ -19,18 +19,17 @@
   the `dev:test` entry in `.claude/launch.json`), which loads `.env.test` —
   pointed at the local Supabase stack (`npx supabase start`), never the real
   remote project in `.env`.
-- `playwright.config.ts` points `storageState` at `playwright/.auth/user.json`.
-  That file is created by hand, once, with the local test account
-  (`e2e-test@example.com` — see the Admin API note below) via:
-  ```
-  playwright-cli open http://localhost:4321/auth/signin --headed
-  # ...fill email/password, click Sign in...
-  playwright-cli state-save playwright/.auth/user.json
-  ```
-  Re-run this whenever the saved session expires (test failures with
-  `Sign in`/`redirect to /auth/signin` are the tell). The local test account
-  itself was created once via the local Supabase Admin API (bypasses the
-  email-confirmation/rate-limit flow), not through the signup UI:
+- `playwright.config.ts` has a `setup` project (`tests/e2e/auth.setup.ts`)
+  that the `chromium` project depends on: it logs in once via the real UI
+  and saves the session to `playwright/.auth/user.json`, which every other
+  test then reuses via `storageState`. This runs automatically on every
+  `npm run test:e2e` — nothing to do by hand, and there's no stale-session
+  failure mode to watch for since it's regenerated every run.
+- The test account it logs in as (`e2e-test@example.com` / `TestPassword123`
+  by default, overridable via `E2E_TEST_EMAIL` / `E2E_TEST_PASSWORD`) must
+  already exist in the local Supabase stack. Create it once per stack via
+  the local Admin API (bypasses the email-confirmation/rate-limit flow, not
+  through the signup UI):
   ```
   curl -X POST 'http://127.0.0.1:54321/auth/v1/admin/users' \
     -H "apikey: <local service_role key from `npx supabase status`>" \
@@ -38,6 +37,8 @@
     -H "Content-Type: application/json" \
     -d '{"email":"e2e-test@example.com","password":"TestPassword123","email_confirm":true}'
   ```
+  CI runs this same call against its own fresh stack on every run (see
+  `.github/workflows/ci.yml`).
 - Internal boundaries (auth, routing, Supabase/DB) stay real. Only mock
   external, non-deterministic third-party APIs at the network layer — this
   app has none in the yarn-management flows today.
